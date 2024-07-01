@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        #logo {
+            font-size: 500%;
+            margin-top: 60px;
+            margin-left: 60px;
+        }
+        .offcanvas {
+            background-color: #fff;
+            color: #023b6d;
+        }
+        .offcanvas .offcanvas-header,
+        .offcanvas .offcanvas-body,
+        .offcanvas .dropdown-menu {
+            background-color: #fff;
+        }
+        .offcanvas .btn,
+        .offcanvas .dropdown-item {
+            background-color: #fff;
+            color: #023b6d;
+        }
+        .offcanvas .btn:hover,
+        .offcanvas .dropdown-item:hover {
+            background-color: #f0f0f0;
+            color: #023b6d;
+        }
+        .btn-close {
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+<h1 id="logo">hihihi</h1>
+<h2>유저 관리</h2>
+<br/>
+<br/>
+<a class="btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+    <img src="../../img/img.png" style="width: 100px;">
+</a>
+<br/>
+<hr style="border:0; height:1px; background: #000; width: 2000px;">
+<br/>
+
+
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel" onclick="location.href='/AdminPage'">관리자 메뉴</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="dropdown mt-3">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn" onclick="location.href='/User'">회원관리</button>
+            </div>
+            <br>
+            <br>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn" onclick="location.href='/Admin/Word'">단어관리</button>
+            </div>
+            <br>
+            <br>
+            <div class="btn-group" role="group">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    통계 데이터
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/StatData-AgeLayer">연령층</a></li>
+                    <li><a class="dropdown-item" href="/StatData-AnswerRate">오답률</a></li>
+                    <li><a class="dropdown-item" href="/StatData-DailyContact">일일 접속자</a></li>
+                    <li><a class="dropdown-item" href="/StatData-Login">로그인</a></li>
+                </ul>
+            </div>
+            <div id="logDataButtonContainer">
+                <br>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn" onclick="location.href='/LogData'">로그 데이터</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>h1</h1>
+
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+
+</body>
+<script type="text/javascript" src="../../js/dropdownJs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+
+</script>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>시험 정보</title>
+    <!-- jQuery 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('input[name="viewOptions"]').change(function() {
+                if ($('#viewWrongOnly').is(':checked')) {
+                    $('#fullTable').hide();
+                    $('#wrongNote').show();
+                } else {
+                    $('#wrongNote').hide();
+                    $('#fullTable').show();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>시험 정보</h1>
+<!-- 라디오 버튼을 추가하여 오답 노트 표시 옵션 제공 -->
+<div>
+    <input type="radio" id="viewAll" name="viewOptions" value="all" checked>
+    <label for="viewAll">전체 문제 보기</label>
+    <input type="radio" id="viewWrongOnly" name="viewOptions" value="wrongOnly">
+    <label for="viewWrongOnly">오답 노트 보기</label>
+</div>
+
+<!-- 전체 문제 테이블 -->
+<div id="fullTable">
+    <h2>전체 문제</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>문제 번호</th>
+            <th>사용자 답안</th>
+            <th>정답 여부</th>
+            <th>단어 정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 반복문을 통해 각 결과를 테이블에 표시 -->
+        <tr th:each="result : ${resultsWithWordInfo}">
+            <td th:text="${result.testNum} ?: 'N/A'"></td>
+            <td th:text="${result.answer} ?: 'N/A'"></td>
+            <td th:text="${result.ox} ?: 'N/A'"></td>
+            <!-- WordEntity의 정보에 접근하여 표시 -->
+            <td th:if="${result.wordIdx != null}" th:text="${result.wordIdx.wordName}"></td>
+            <td th:unless="${result.wordIdx != null}">N/A</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 오답 노트 -->
+<div id="wrongNote" class="hidden">
+    <h2>오답노트</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>문제 번호</th>
+            <th>사용자 답안</th>
+            <th>문제</th>
+            <th>정답</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 오답만 필터링해서 표시 -->
+        <tr th:each="result : ${resultsWithWordInfo}" th:unless="${result.ox == 'O'}">
+            <td th:text="${result.testNum} ?: 'N/A'"></td>
+            <td th:text="${result.answer} ?: 'N/A'"></td>
+            <td th:text="${result.wordIdx.wordName}"></td>
+            <td th:text="${result.wordIdx.wordMean}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

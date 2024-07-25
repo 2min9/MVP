@@ -1,0 +1,236 @@
+html{
+    width: 100%;
+    height: 100vh;
+}
+
+.form_main {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    padding: 30px 30px 30px 30px;
+    border-radius: 30px;
+    /* box-shadow: 0px 0px 40px rgba(0, 0, 0, 1); */
+    /* box-shadow: 0 0 40px #BF8F73; */
+    /* 중앙 배치를 위한 스타일 */
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.heading {
+    font-size: 2.5em;
+    color: #2e2e2e;
+    font-weight: 700;
+    margin: 15px 0 30px 0;
+}
+
+.inputContainer {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 10px;
+}
+
+.inputField {
+    width: 100%;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid rgb(173, 173, 173);
+    border-radius: 30px;
+    margin: 10px 0;
+    color: black;
+    font-size: .8em;
+    font-weight: 500;
+    box-sizing: border-box;
+    padding-left: 30px;
+}
+
+.inputField:focus {
+    outline: none;
+    border-bottom: 2px solid #A6948D;
+}
+
+.inputField::placeholder {
+    color: rgb(80, 80, 80);
+    font-size: 1em;
+    font-weight: 500;
+}
+
+#button {
+    position: relative;
+    width: 100%;
+    border: 2px solid #BF8F73;
+    background-color: #BF8F73;
+    height: 40px;
+    color: white;
+    font-size: 1em;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 30px;
+    margin: 10px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#button::after {
+    content: "";
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.253);
+    height: 100%;
+    width: 150px;
+    top: 0;
+    left: -200px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 100px;
+    filter: blur(10px);
+    transition-duration: .5s;
+}
+
+#button:hover::after {
+    transform: translateX(600px);
+    transition-duration: .5s;
+}
+
+.signupContainer {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.signupContainer p {
+    font-size: .9em;
+    font-weight: 500;
+    color: black;
+}
+
+.signupContainer a {
+    font-size: .7em;
+    font-weight: 500;
+    background-color: #A6948D;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+.guest_wrap {
+    text-align: center;
+    margin-top: 10%;
+    width: 100%;
+    border: 2px solid #402B23;
+    border-radius: 30px;
+    padding: 2% 0;
+}
+
+.guest_wrap:active {
+    filter: blur(10px);
+    transition-duration: .5s;
+}
+
+
+.guest {
+    text-decoration: none;
+    font-size: 1em;
+    color: black;
+}
+
+
+/* 모달 기본 스타일링 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.modal-buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #218838;
+}
+
+.cancel-btn:hover {
+    background-color: #c82333;
+}
+
+.font-red {
+    color: red;
+}
+
+.font-green {
+    color: green;
+}

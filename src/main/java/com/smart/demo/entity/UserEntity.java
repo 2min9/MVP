@@ -1,11 +1,13 @@
 package com.smart.demo.entity;
 
 import com.smart.demo.dto.UserDto;
+import com.smart.demo.security.PasswordConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,40 +18,44 @@ public class UserEntity extends BaseEntity{
     private Integer idx;
 
     @Column
-    private String name_t;
+    private String userName;
 
     @Column
-    private String nickname;
+    private String userNickname;
 
     @Column
-    private String email;
+    private String userEmail;
+
+    @Convert(converter = PasswordConverter.class)
+    @Column
+    private String userPassword; // PasswordConverter 적용
 
     @Column
-    private String password_t;
+    private String userBirth;
 
     @Column
-    private String birth_year_t;
+    private String userPhone;
 
     @Column
-    private String phone_t;
+    private char userGender;
 
     @Column
-    private char gender;
+    private char userAble;
 
-    @Column
-    private char user_able;
-
+    @Column(nullable = false, unique = true)
+    private String userUuid;
 
     public static UserEntity toUserEntity(UserDto userDto) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setName_t(userDto.getName_t());
-        userEntity.setNickname(userDto.getNickname());
-        userEntity.setEmail(userDto.getEmail());
-        userEntity.setPassword_t(userDto.getPassword_t());
-        userEntity.setBirth_year_t(userDto.getBirth_year_t());
-        userEntity.setPhone_t(userDto.getPhone_t());
-        userEntity.setGender(userDto.getGender());
-        userEntity.setUser_able(userDto.getUser_able());
+        userEntity.setUserName(userDto.getUserName());
+        userEntity.setUserNickname(userDto.getUserNickname());
+        userEntity.setUserEmail(userDto.getUserEmail());
+        userEntity.setUserPassword(userDto.getUserPassword());
+        userEntity.setUserBirth(userDto.getUserBirth());
+        userEntity.setUserPhone(userDto.getUserPhone());
+        userEntity.setUserGender(userDto.getUserGender());
+        userEntity.setUserAble(userDto.getUserAble());
+        userEntity.setUserUuid(UUID.randomUUID().toString());
 
         return userEntity;
     }
@@ -57,14 +63,15 @@ public class UserEntity extends BaseEntity{
     public static UserEntity toUpdateUserEntity(UserDto userDto) {
         UserEntity userEntity = new UserEntity();
         userEntity.setIdx(userDto.getIdx());
-        userEntity.setName_t(userDto.getName_t());
-        userEntity.setNickname(userDto.getNickname());
-        userEntity.setEmail(userDto.getEmail());
-        userEntity.setPassword_t(userDto.getPassword_t());
-        userEntity.setBirth_year_t(userDto.getBirth_year_t());
-        userEntity.setPhone_t(userDto.getPhone_t());
-        userEntity.setGender(userDto.getGender());
-        userEntity.setUser_able(userDto.getUser_able());
+        userEntity.setUserName(userDto.getUserName());
+        userEntity.setUserNickname(userDto.getUserNickname());
+        userEntity.setUserEmail(userDto.getUserEmail());
+        userEntity.setUserPassword(userDto.getUserPassword());
+        userEntity.setUserBirth(userDto.getUserBirth());
+        userEntity.setUserPhone(userDto.getUserPhone());
+        userEntity.setUserGender(userDto.getUserGender());
+        userEntity.setUserAble(userDto.getUserAble());
+        userEntity.setUserUuid(UUID.randomUUID().toString());
 
         return userEntity;
     }

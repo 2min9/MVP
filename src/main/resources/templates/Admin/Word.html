@@ -97,7 +97,7 @@
         <tbody>
         <tr th:each="word: ${wordList}">
             <td th:text="${word.idx}"></td>
-            <td th:text="${word.words_name}"></td>
+            <td th:text="${word.wordName}"></td>
             <td th:text="*{#temporals.format(word.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <a th:href="@{delete/{idx}(dx=${word.idx})}" class="btn btn-danger">삭제</a>

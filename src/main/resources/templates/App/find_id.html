@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="../../css/signup.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>find_id</title>
+</head>
+
+<body>
+<form class="form" action="" method="post">
+    <p class="title">Find_ID </p>
+
+    <label>
+        <input class="input" type="text" placeholder="" name="userName" required>
+        <span>Name</span>
+    </label>
+
+    <label style="display: flex; flex-direction: row;">
+        <input class="number" name="userPhone" type="tel" placeholder="" required>
+        <span>Phone</span>
+        <div class="btn">인증번호받기</div>
+    </label>
+
+    <label style="display: flex; flex-direction: row;">
+        <input class="number" type="text" placeholder="">
+        <span>Certification Number</span>
+        <div class="btn2">등록</div>
+    </label>
+    <button class="submit" type="submit">Find ID</button>
+    <button class="back">Back</button>
+    <p>결과 들어갈 곳</p>
+    <br/>
+    <br/>
+    <a class="signin" href="#">Find pw</a>
+
+<!--    <p class="signin">사용자의 아이디는  <strong style="color: #8C5946;">oooo@naver.com</strong>  입니다.</p>-->
+</form>
+</body>
+
+</html>

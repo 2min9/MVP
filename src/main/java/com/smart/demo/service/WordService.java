@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,10 +48,10 @@ public class WordService {
         if(optionalWordEntity.isPresent()) {
             WordDto wordDto = new WordDto();
             wordDto.setIdx(optionalWordEntity.get().getIdx());
-            wordDto.setWords_name(optionalWordEntity.get().getWords_name());
-            wordDto.setWords_mean(optionalWordEntity.get().getWords_mean());
-            wordDto.setWords_difficulty(optionalWordEntity.get().getWords_difficulty());
-            wordDto.setWords_similar(optionalWordEntity.get().getWords_similar());
+            wordDto.setWordName(optionalWordEntity.get().getWordName());
+            wordDto.setWordMean(optionalWordEntity.get().getWordMean());
+            wordDto.setWordLevel(optionalWordEntity.get().getWordLevel());
+            wordDto.setWordDetail(optionalWordEntity.get().getWordDetail());
             return wordDto;
         } else {
             return null;
@@ -62,11 +64,10 @@ public class WordService {
         if(wordEntityOptional.isPresent()) {
             WordEntity wordEntity = null;
             wordEntity = wordEntityOptional.get();
-            wordEntity.setWords_name(wordDto.getWords_name());
-            wordEntity.setWords_difficulty(wordDto.getWords_difficulty());
-            wordEntity.setWords_mean(wordDto.getWords_mean());
-            wordEntity.setWords_similar(wordDto.getWords_similar());
-            wordEntity.setWords_pronunciation(wordDto.getWords_pronunciation());
+            wordEntity.setWordName(wordDto.getWordName());
+            wordEntity.setWordLevel(wordDto.getWordLevel());
+            wordEntity.setWordMean(wordDto.getWordMean());
+            wordEntity.setWordDetail(wordDto.getWordDetail());
 
             wordEntity = wordRepository.save(wordEntity);
             updateDto = WordDto.toWordDto(wordEntity);
@@ -77,4 +78,61 @@ public class WordService {
     public void delete(Integer idx) {
         wordRepository.deleteById(idx);
     }
+
+    public WordDto findRandomWord(List<Integer> solvedWords) {
+        List<WordEntity> wordEntityList = wordRepository.findAll();
+
+        if (wordEntityList.isEmpty()) {
+            return null; // 단어가 없을 경우 처리
+        }
+
+        // 제외할 단어를 필터링
+        List<WordEntity> filteredList = wordEntityList.stream()
+                .filter(word -> solvedWords == null || !solvedWords.contains(word.getIdx()))
+                .collect(Collectors.toList());
+
+        if (filteredList.isEmpty()) {
+            return null; // 모든 단어가 제외된 경우 처리
+        }
+
+        // 랜덤 인덱스 생성
+        Random random = new Random();
+        int randomIndex = random.nextInt(filteredList.size());
+
+        // 랜덤으로 선택된 단어 반환
+        WordEntity randomWordEntity = filteredList.get(randomIndex);
+        return WordDto.toWordDto(randomWordEntity);
+    }
+
+    public List<WordDto> findByWordLevel(int wordLevel) {
+        return wordRepository.findByWordLevel(wordLevel)
+                .stream()
+                .map(wordEntity -> new WordDto(wordEntity.getIdx(), wordEntity.getWordName(), wordEntity.getWordMean()))
+                .collect(Collectors.toList());
+    }
+
+    public WordDto findRandomWordFromList(List<WordDto> wordList, List<Integer> solvedWords) {
+        List<WordDto> unsolvedWords = wordList.stream()
+                .filter(word -> !solvedWords.contains(word.getIdx()))
+                .collect(Collectors.toList());
+
+        if (unsolvedWords.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+        return unsolvedWords.get(random.nextInt(unsolvedWords.size()));
+    }
+
+    public WordEntity convertToEntity(WordDto wordDto) {
+        WordEntity wordEntity = new WordEntity();
+        wordEntity.setWordName(wordDto.getWordName());
+        wordEntity.setWordMean(wordDto.getWordMean());
+        wordEntity.setWordLevel(wordDto.getWordLevel());
+        wordEntity.setWordDetail(wordEntity.getWordDetail());
+        wordEntity.setWordAble(wordDto.getWordAble());
+        return wordEntity;
+    }
+
+
 }

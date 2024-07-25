@@ -24,7 +24,7 @@ public class AdminEntity {
     private String admin_password;
 
     @Column
-    private char rank;
+    private char admin_rank;
 
 
     public static AdminEntity toAdminEntity(AdminDto adminDto) {
@@ -32,7 +32,7 @@ public class AdminEntity {
         adminEntity.setAdmin_name(adminDto.getAdmin_name());
         adminEntity.setAdmin_email(adminDto.getAdmin_email());
         adminEntity.setAdmin_password(adminDto.getAdmin_password());
-        adminEntity.setRank(adminDto.getRank());
+        adminEntity.setAdmin_rank(adminDto.getRank());
 
         return adminEntity;
     }

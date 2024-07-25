@@ -86,14 +86,15 @@
 </div>
 <form action="/Admin/update/${word.idx}" method="post">
     <input type="hidden" name="idx" th:value="${word.idx}">
+    <input type="hidden" name="wordDetail" th:value="${word.wordDetail}">
     <label>수정 할 단어 : </label>
-    <input type="text" name="words_name" th:value="${word.words_name}">
+    <input type="text" name="wordName" th:value="${word.wordName}">
     <label>난이도 : </label>
-    <input type="text" name="words_difficulty" th:value="${word.words_difficulty}">
+    <input type="text" name="wordDifficulty" th:value="${word.wordDifficulty}">
     <label>뜻 : </label>
-    <input type="text" name="words_mean" th:value="${word.words_mean}">
+    <input type="text" name="wordMean" th:value="${word.wordMean}">
     <label>유사 단어 : </label>
-    <input type="text" name="words_similar" th:value="${word.words_similar}">
+    <input type="text" name="wordSimilar" th:value="${word.wordSimilar}">
     <input type="submit" value="단어수정">
 </form>
 </body>

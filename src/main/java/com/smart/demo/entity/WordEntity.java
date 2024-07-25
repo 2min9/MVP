@@ -5,48 +5,42 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "words_t")
+@Table(name = "wordinfo")
 public class WordEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
     @Column
-    private String words_name;
+    private String wordName;
 
     @Column
-    private Integer words_difficulty;
+    private Integer wordLevel;
 
     @Column
-    private String words_mean;
+    private String wordMean;
 
     @Column
-    private String words_similar;
+    private String wordDetail;
 
     @Column
-    private String words_pronunciation;
+    private char wordAble;
+
+    @OneToMany(mappedBy = "wordIdx", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestResultEntity> testResults = new ArrayList<>();
 
     public static WordEntity toSaveEntity(WordDto wordDto) {
         WordEntity wordEntity = new WordEntity();
-        wordEntity.setWords_name(wordDto.getWords_name());
-        wordEntity.setWords_difficulty(wordDto.getWords_difficulty());
-        wordEntity.setWords_mean(wordDto.getWords_mean());
-        wordEntity.setWords_similar(wordDto.getWords_similar());
-        wordEntity.setWords_pronunciation("발음");
-        // 추후에 변환
-        return wordEntity;
-    }
-    public static WordEntity toUpdateEntity(WordDto wordDto) {
-        WordEntity wordEntity = new WordEntity();
-        wordEntity.setIdx(wordDto.getIdx());
-        wordEntity.setWords_name(wordDto.getWords_name());
-        wordEntity.setWords_difficulty(wordDto.getWords_difficulty());
-        wordEntity.setWords_mean(wordDto.getWords_mean());
-        wordEntity.setWords_similar(wordDto.getWords_similar());
-        wordEntity.setWords_pronunciation("발음");
+        wordEntity.setWordName(wordDto.getWordName());
+        wordEntity.setWordLevel(wordDto.getWordLevel());
+        wordEntity.setWordMean(wordDto.getWordMean());
+        wordEntity.setWordDetail(wordDto.getWordDetail());
         // 추후에 변환
         return wordEntity;
     }

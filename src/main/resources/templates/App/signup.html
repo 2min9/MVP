@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="../../css/signup.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>signup</title>
+</head>
+
+<body>
+<form class="form" action="/App/signup" method="post">
+    <p class="title">Sign up </p>
+    <div class="flex">
+        <label>
+            <input class="input" type="text" name="userName" placeholder="" required>
+            <span>Name</span>
+        </label>
+
+        <label>
+            <input class="input" type="text" id="nickname"  name="userNickname" onblur="nickCheck()" placeholder="" required>
+            <span>Nickname</span>
+            <p id="nick-check-result" style="display: flex; margin: 0; font-size: 0.7em; color: red;"></p>
+        </label>
+    </div>
+
+
+    <div class="radio-container">
+        <label>
+            <input type="radio" name="userGender" value="M">
+            <span class="checkmark"></span>
+            남
+        </label>
+        <label>
+            <input type="radio" name="userGender" value="F">
+            <span class="checkmark"></span>
+            여
+        </label>
+    </div>
+
+    <label>
+        <input class="input" type="date" name="userBirth" placeholder="">
+        <span>birth</span>
+    </label>
+
+    <label>
+        <input class="input" type="email" name="userEmail" placeholder="" required>
+        <span>Email</span>
+    </label>
+
+    <label>
+        <input class="input" type="password" id="password" name="userPassword" placeholder="" required>
+        <span>Password</span>
+    </label>
+
+    <label>
+        <input class="input" type="password" id="password2" name="userPassword2" placeholder="" required>
+        <span>Confirm password</span>
+    </label>
+
+    <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
+
+    <label style="display: flex; flex-direction: row;">
+        <input class="number" name="userPhone" type="tel" placeholder="" required>
+        <span>Phone</span>
+        <div class="btn">인증번호받기</div>
+    </label>
+
+    <label style="display: flex; flex-direction: row;">
+        <input class="number" type="text" placeholder="">
+        <span>Certification Number</span>
+        <div class="btn2">등록</div>
+    </label>
+
+    <button class="submit" type="submit">Submit</button>
+    <button class="back">Back</button>
+    <p class="signin">Already have an acount ? <a href="#">Signin</a> </p>
+</form>
+<script>
+    const nickCheck = () => {
+        const nickname = document.getElementById("nickname").value;
+        const checkResult = document.getElementById("nick-check-result");
+        console.log("입력값: ", nickname);
+        $.ajax({
+            type: "post",
+            url: "/user/nick-check",
+            data: {
+                "userNickname": nickname
+            },
+            success: function (res) {
+                if (res == "OK") {
+                    console.log("요청성공", res);
+                    checkResult.style.color = "green";
+                    checkResult.innerHTML = "사용 가능한 '닉네임' 입니다.";
+                } else {
+                    checkResult.style.color = "red";
+                    checkResult.innerHTML = "이미 사용중인 '닉네임' 입니다.";
+                }
+            },
+            error: function (err) {
+                console.log("에러발생", err);
+            }
+        });
+    }
+
+    function passConfirm() {
+        var password = document.getElementById('password').value;                    //비밀번호
+        var passwordConfirm = document.getElementById('password2').value;  //비밀번호 확인 값
+        var confirmMsg = document.getElementById('confirmMsg');                //확인 메세지
+
+        if (password === passwordConfirm && password !== "") {
+            confirmMsg.style.color = 'green';
+            confirmMsg.innerHTML = "비밀번호 일치";  // innerHTML : HTML 내부에 추가적인 내용을 넣을 때 사용하는 것.
+        } else {
+            confirmMsg.style.color = 'red';
+            confirmMsg.innerHTML = "비밀번호 불일치";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var passwordField = document.getElementById('password');
+        var passwordConfirmField = document.getElementById('password2');
+
+        passwordField.addEventListener('blur', passConfirm);
+        passwordConfirmField.addEventListener('input', passConfirm);
+    });
+</script>
+</body>
+
+</html>

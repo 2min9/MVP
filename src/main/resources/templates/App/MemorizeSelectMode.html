@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p onclick="location.href='/App/MemorizeSelectLevel'">영어 -> 한글</p>
+    <p onclick="location.href='/App/MemorizeSelectLevelKorea'">한글 -> 영어</p>
+    <input type="hidden" th:value="${session.userUuid}">
+    <div th:if="${session.email != null}">
+        <p th:text="${user.idx}"></p>
+        <a th:href="@{/App/MyPage/{idx}(idx=${session.idx})}" class="btn btn-danger">마이페이지</a>
+    </div>
+</body>
+</html>

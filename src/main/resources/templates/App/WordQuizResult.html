@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>단어 시험</title>
+    <style>
+        .result-message {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green; /* 성공 메시지의 색상 */
+        }
+        .result-message2 {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red; /* 성공 메시지의 색상 */
+        }
+    </style>
+</head>
+<body>
+<h1>단어 시험</h1>
+
+<!-- 현재 풀고 있는 문제 번호 표시 -->
+<div>
+    <p th:text="'현재 문제 번호 : ' + ${solvedCount}"></p>
+</div>
+<div>
+    <p th:text="${message}"></p>
+</div>
+<!-- 단어 표시 -->
+<div th:if="${word}">
+    <h2 th:text="${word.wordName}"></h2>
+    <p th:text="${word.wordMean}"></p>
+    <!-- 퀴즈 모드 여부에 따른 처리 -->
+    단계 : <label th:value="${word.wordLevel}"></label>
+    <div th:if="${quizMode}">
+        <form action="#" th:action="@{/checkAnswer}" method="post">
+            <input type="hidden" name="wordIdx" th:value="${word.idx}" />
+            <input type="hidden" name="wordTest.idx" th:value="${session.wordTestEntity.idx}" />
+            <label for="userAnswer">뜻 입력:</label>
+            <input type="text" id="userAnswer" name="userAnswer" required />
+            <button type="submit">등록</button>
+            <button onclick="history.back()">뒤로</button>
+        </form>
+
+        <!-- 결과 메시지 표시 -->
+<!--        <p th:text="${resultMessage}" class="result-message"></p>-->
+        <div th:if="${resultMessage}" class="result-message">
+            <img src="../../img/O.png">
+        </div>
+        <p th:text="${resultMessage2}" class="result-message2"></p>
+    </div>
+    <div th:if="${resultMessage} or ${resultMessage2}">
+        <div th:if="${lastQuestion}">
+            <!-- 마지막 문제일 경우 제출 버튼 보여주기 -->
+            <form action="#" th:action="@{/App/Quiz/endTest}" method="post">
+                <button type="submit">제출</button>
+            </form>
+        </div>
+        <div th:unless="${lastQuestion}">
+            <!-- 마지막 문제가 아닌 경우 다음 버튼 보여주기 -->
+            <form action="#" th:action="@{/App/Quiz/Next}" method="get">
+                <button type="submit">다음</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 단어가 없는 경우 처리 -->
+<div th:unless="${word}">
+    <p>표시할 단어가 없습니다.</p>
+</div>
+</body>
+<!-- display block으로 바꾸기 -->
+<script>
+    window.onload = function() {
+        // 체크할 요소 선택
+        var resultDiv = document.getElementById('resultDiv');
+        // resultDiv가 존재하면 display 속성을 block으로 변경
+        if (resultDiv) {
+            resultDiv.style.display = 'block';
+        }
+    };
+</script>
+
+<!-- TTS script -->
+<script>
+    $(function(){
+        $('#btn-read').click(function(){
+            var wordName = $('#word-name').text().trim();
+            speak(wordName, {
+                rate: 1,
+                pitch: 1.2,
+                lang: 'en-US'
+            });
+        });
+    });
+
+    function speak(text, opt_prop) {
+        window.speechSynthesis.cancel(); // 현재 읽고있다면 초기화
+
+        const prop = opt_prop || {};
+
+        const speechMsg = new SpeechSynthesisUtterance();
+        speechMsg.rate = prop.rate || 0.7; // 속도: 0.1 ~ 10
+        speechMsg.pitch = prop.pitch || 0.8; // 음높이: 0 ~ 2
+        speechMsg.lang = prop.lang || "en-US";
+        speechMsg.text = text;
+
+        // SpeechSynthesisUtterance에 저장된 내용을 바탕으로 음성합성 실행
+        window.speechSynthesis.speak(speechMsg);
+    }
+</script>
+<!-- footer script   -->
+<script>
+    // 언더바 스크립트
+    const images = {
+        home: ["../icon/house1.png", "../icon/house2.png"],
+        note: ["../icon/note3.png", "../icon/note2.png"],
+        mypage: ["../icon/user1.png", "../icon/user2.png"],
+        ranking: ["../icon/ranking1.png", "../icon/ranking2.png"]
+    };
+
+    let activeIcon = null;
+
+    function resetIcons() {
+        document.getElementById('homeImg').src = images.home[0];
+        document.getElementById('homeText').style.color = '#919299';
+
+        document.getElementById('noteImg').src = images.note[0];
+        document.getElementById('noteText').style.color = '#919299';
+
+        document.getElementById('mypageImg').src = images.mypage[0];
+        document.getElementById('mypageText').style.color = '#919299';
+
+        document.getElementById('rankingImg').src = images.ranking[0];
+        document.getElementById('rankingText').style.color = '#919299';
+    }
+
+    function handleIconClick(icon) {
+        if (activeIcon === icon) {
+            return;
+        }
+
+        resetIcons();
+
+        document.getElementById(icon + 'Img').src = images[icon][1];
+        document.getElementById(icon + 'Text').style.color = '#000';
+        // 눌렀을때 글자 굵게 하는 것
+        document.getElementById(icon + 'Text').style.fontWeight = 600;
+
+        activeIcon = icon;
+    }
+    document.getElementById('homeIcon').addEventListener('click', () => handleIconClick('home'));
+    document.getElementById('noteIcon').addEventListener('click', () => handleIconClick('note'));
+    document.getElementById('mypageIcon').addEventListener('click', () => handleIconClick('mypage'));
+    document.getElementById('rankingIcon').addEventListener('click', () => handleIconClick('ranking'));
+</script>
+</html>

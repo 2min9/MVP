@@ -16,33 +16,35 @@ import java.time.LocalDateTime;
 @Builder
 public class WordDto {
     private Integer idx;
-    private String words_name;
-    private int words_difficulty;
-    private String words_mean;
-    private String words_similar;
-    private String words_pronunciation;
+    private String wordName;
+    private int wordLevel;
+    private String wordMean;
+    private String wordDetail;
+    private char wordAble;
+    private double word_incorrect_percent;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 
-    public WordDto(int idx, String words_name, int words_difficulty, String words_mean, String words_similar, String words_pronunciation) {
+    public WordDto(Integer idx, String wordName, String wordMean) {
         this.idx = idx;
-        this.words_name = words_name;
-        this.words_difficulty = words_difficulty;
-        this.words_mean = words_mean;
-        this.words_similar = words_similar;
-        this.words_pronunciation = words_pronunciation;
+        this.wordName = wordName;
+        this.wordMean = wordMean;
     }
 
+    // WordEntity를 WordDto로 변환하는 메서드
     public static WordDto toWordDto(WordEntity wordEntity) {
-        WordDto wordDto = new WordDto();
-        wordDto.setIdx(wordEntity.getIdx());
-        wordDto.setWords_name(wordEntity.getWords_name());
-        wordDto.setWords_difficulty(wordEntity.getWords_difficulty());
-        wordDto.setWords_mean(wordEntity.getWords_mean());
-        wordDto.setWords_similar(wordEntity.getWords_similar());
-        wordDto.setWords_pronunciation(wordEntity.getWords_pronunciation());
-        wordDto.setCreatedTime(wordEntity.getCreatedTime());
-        wordDto.setUpdatedTime(wordEntity.getUpdatedTime());
-        return wordDto;
+        if (wordEntity == null) {
+            return null;
+        }
+        return WordDto.builder()
+                .idx(wordEntity.getIdx())
+                .wordName(wordEntity.getWordName())
+                .wordLevel(wordEntity.getWordLevel())
+                .wordMean(wordEntity.getWordMean())
+                .wordDetail(wordEntity.getWordDetail())
+                .wordAble(wordEntity.getWordAble())
+                .createdTime(wordEntity.getCreatedTime())
+                .updatedTime(wordEntity.getUpdatedTime())
+                .build();
     }
 }

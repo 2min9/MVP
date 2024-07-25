@@ -1,0 +1,74 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
+    /* Solid white background */
+    margin: 0;
+    overflow: hidden;
+    /* Ensure no scrollbar appears */
+    position: relative;
+    cursor: pointer;
+    /* Change cursor to pointer to indicate clickable area */
+}
+
+.loader {
+    position: relative;
+    overflow: hidden;
+    border-right: 3px solid rgba(0, 0, 0, 0.75);
+    /* Border color of the blinking cursor */
+    width: 0;
+    animation: typewriter 3s steps(20) infinite alternate, blink 0.55s steps(20) infinite;
+    margin-bottom: 20px;
+    /* Space between the loader and the message */
+}
+
+.loader-text {
+    font-size: 50px;
+    font-weight: 700;
+    background: linear-gradient(to right, #402B23, #8C5946, #BF8F73, #F2EEEB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes typewriter {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 260px;
+        /* Adjusted width to fit the text */
+    }
+}
+
+@keyframes blink {
+    0% {
+        border-right-color: rgba(0, 0, 0, 0.75);
+        /* Color of the blinking cursor */
+    }
+
+    100% {
+        border-right-color: transparent;
+    }
+}
+
+.click-message {
+    position: absolute;
+    bottom: 8%;
+    /* Adjust this value to move the message further down */
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.5);
+    /* Text color with opacity */
+    pointer-events: none;
+    /* Ensure clicks are not blocked by the message */
+}
+
+.jua-regular {
+    font-family: "Jua", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}

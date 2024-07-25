@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>단어 시험</title>
+    <style>
+        .result-message {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green; /* 성공 메시지의 색상 */
+        }
+        .result-message2 {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red; /* 성공 메시지의 색상 */
+        }
+    </style>
+</head>
+<body>
+<h1>단어 시험</h1>
+
+<!-- 현재 풀고 있는 문제 번호 표시 -->
+<div>
+    <p th:text="'남은 문제 ' + ${solvedCount} + '/30'"></p>
+</div>
+<div>
+    <p th:text="${message}"></p>
+</div>
+<!-- 단어 표시 -->
+<div th:if="${word}">
+    <h2 th:text="${word.wordMean}"></h2>
+    <p th:text="${word.wordName}"></p>
+    <!-- 퀴즈 모드 여부에 따른 처리 -->
+    <div th:if="${quizMode}">
+        <form action="#" th:action="@{/checkAnswerKorea}" method="post">
+            <input type="hidden" name="wordIdx" th:value="${word.idx}" />
+            <label for="userAnswer">뜻 입력:</label>
+            <input type="text" id="userAnswer" name="userAnswer" required />
+            <button type="submit">등록</button>
+        </form>
+        <!-- 결과 메시지 표시 -->
+        <p th:text="${resultMessage}" class="result-message"></p>
+        <p th:text="${resultMessage2}" class="result-message2"></p>
+    </div>
+    <div th:if="${resultMessage} or ${resultMessage2}">
+        <div th:if="${lastQuestion}">
+            <!-- 마지막 문제일 경우 제출 버튼 보여주기 -->
+            <form action="#" th:action="@{/App/Quiz/SubmitKorea}" method="get">
+                <button type="submit">제출</button>
+            </form>
+        </div>
+        <div th:unless="${lastQuestion}">
+            <!-- 마지막 문제가 아닌 경우 다음 버튼 보여주기 -->
+            <form action="#" th:action="@{/App/Quiz/NextKorea}" method="get">
+                <button type="submit">다음</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 단어가 없는 경우 처리 -->
+<div th:unless="${word}">
+    <p>표시할 단어가 없습니다.</p>
+</div>
+</body>
+</html>

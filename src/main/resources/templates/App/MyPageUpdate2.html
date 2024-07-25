@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>개인 정보 수정</h1>
+<form th:action="@{/App/MyPage/update/{idx}(idx=${user.idx})}" method="post">
+    <input type="hidden" name="idx" th:value="${user.idx}">
+    <input type="hidden" name="userName" th:value="${user.userName}">
+    <input type="hidden" name="userEmail" th:value="${user.userEmail}">
+    <input type="hidden" name="userGender" th:value="${user.userGender}">
+    <input type="hidden" name="userBirth" th:value="${user.userBirth}">
+    <p>별명</p>
+    <input type="text" name="userNickname" th:value="${user.userNickname}">
+    <br/>
+
+    <p>비밀번호</p>
+    <input type="text" name="userPassword" th:value="${user.userPassword}">
+    <button>비밀번호 재설정</button>
+    <br/>
+
+    <p>전화번호 수정</p>
+    <input type="text" id="phone" name="userPhone" th:value="${user.userPhone}">
+    <button type="button" onclick="sendVerificationCode()" class="Certification_Number">인증번호받기</button>
+    <br/>
+
+    <p>인증번호 입력</p>
+    <input type="text" id="code" placeholder="인증번호 6자리 숫자">
+    <button type="button" onclick="verifyCode()" class="registration">등록</button>
+
+    <br/><br/>
+    <button type="submit">수정</button>
+    <button>계정 탈퇴</button>
+    <button>로그아웃</button>
+</form>
+<script src="../../js/coolSMS.js"></script>
+</body>
+</html>

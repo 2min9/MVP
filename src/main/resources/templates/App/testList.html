@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>시험 목록</title>
+</head>
+<body>
+<h1>시험 목록</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>시험 점수</th>
+        <th>시험 레벨</th>
+        <th>시험 날짜</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 시험 목록 데이터 반복 처리 -->
+    <tr th:each="test : ${testPage.content}" th:if="${test.userInfo.userUuid == session.userUuid}" th:onclick="location.href='/App/testDetail/[[${test.idx}]]'">
+        <td th:text="${test.testPoint}"></td>
+        <td th:text="${test.level}"></td>
+        <td th:text="${#temporals.format(test.createdTime, 'yyyy.MM.dd HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이징 네비게이션 -->
+<div>
+    <span th:if="${testPage.hasPrevious()}">
+        <a th:href="@{/App/testList(page=${testPage.number - 1}, size=${testPage.size})}">이전</a>
+    </span>
+
+    <!-- 페이지 번호 버튼 -->
+    <span th:each="pageNum : ${#numbers.sequence(0, testPage.totalPages - 1)}">
+        <a th:href="@{/App/testList(page=${pageNum}, size=${testPage.size})}"
+           th:text="${pageNum + 1}"
+           th:classappend="${pageNum == testPage.number} ? 'current' : ''"></a>
+    </span>
+
+    <span th:if="${testPage.hasNext()}">
+        <a th:href="@{/App/testList(page=${testPage.number + 1}, size=${testPage.size})}">다음</a>
+    </span>
+</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>단어외우기</title>
+    <style>
+        .result-message {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green; /* 성공 메시지의 색상 */
+        }
+        .result-message2 {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red; /* 성공 메시지의 색상 */
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>단어 외우기</h1>
+<!-- 단어 표시 -->
+<div th:if="${word}">
+    <h2 id="word-name" th:text="${word.wordMean}"></h2>
+    <img id="btn-read" src="../../img/sound3.png"/>
+    <p th:text="${word.wordName}"></p>
+    <!-- 퀴즈 모드 여부에 따른 처리 -->
+    <div th:if="${quizMode}">
+        <form action="#" th:action="@{/checkAnswerMemorizeKorea}" method="post">
+            <input type="hidden" name="wordIdx" th:value="${word.idx}" />
+            <label for="userAnswer">단어 입력:</label>
+            <input type="text" id="userAnswer" name="userAnswer" required />
+            <button type="submit">등록</button>
+        </form>
+        <!-- 결과 메시지 표시 -->
+        <p th:text="${resultMessage}" class="result-message"></p>
+        <p th:text="${resultMessage2}" class="result-message2"></p>
+    </div>
+    <div th:if="${resultMessage} or ${resultMessage2}">
+        <form action="#" th:action="@{/App/Quiz/NextMemorizeKorea}" method="get">
+            <button type="submit">다음</button>
+        </form>
+    </div>
+</div>
+
+<!-- 단어가 없는 경우 처리 -->
+<div th:unless="${word}">
+    <p>표시할 단어가 없습니다.</p>
+</div>
+</body>
+
+<script>
+    $(function(){
+        $('#btn-read').click(function(){
+            var wordName = $('#word-name').text().trim();
+            speak(wordName, {
+                rate: 1,
+                pitch: 1.2,
+                lang: 'en-US'
+            });
+        });
+    });
+
+    function speak(text, opt_prop) {
+        window.speechSynthesis.cancel(); // 현재 읽고있다면 초기화
+
+        const prop = opt_prop || {};
+
+        const speechMsg = new SpeechSynthesisUtterance();
+        speechMsg.rate = prop.rate || 0.7; // 속도: 0.1 ~ 10
+        speechMsg.pitch = prop.pitch || 0.8; // 음높이: 0 ~ 2
+        speechMsg.lang = prop.lang || "en-US";
+        speechMsg.text = text;
+
+        // SpeechSynthesisUtterance에 저장된 내용을 바탕으로 음성합성 실행
+        window.speechSynthesis.speak(speechMsg);
+    }
+</script>
+
+
+</html>

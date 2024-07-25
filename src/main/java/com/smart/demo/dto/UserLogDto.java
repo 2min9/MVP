@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @ToString
 public class UserLogDto {
     private Long idx;
-    private String login_ip;
-    private String login_userAgent;
-    private LocalDateTime login_in_Time;
-    private LocalDateTime login_out_Time;
+    private String sessionId;
+    private String connectionUrl;
+    private String method;
+    private LocalDateTime connectionTime;
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="../../css/signup.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>find_pw</title>
+</head>
+
+<body>
+<form class="form" method="post" action="">
+    <p class="title">Find_Password </p>
+    <label>
+        <input class="input" name="userEmail" type="text" placeholder="" required>
+        <span>ID (Email)</span>
+    </label>
+
+    <label>
+        <input class="input" name="userName" type="text" placeholder="" required>
+        <span>Name</span>
+    </label>
+
+    <label>
+        <input class="input" name="userPhone" type="tel" placeholder="" required>
+        <span>Phone</span>
+    </label>
+    <button class="submit" type="submit" >Reset Password</button>
+    <button class="back">Back</button>
+    <button class="back" onclick="location.href='/App/reset_pw'">테스트 버튼</button>
+    <a class="signin" href="#">login</a>
+</form>
+</body>
+
+</html>

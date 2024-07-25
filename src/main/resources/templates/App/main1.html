@@ -1,31 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
 <head>
+    <link href="../../css/splash_screen.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        #main {
-            font-size: 1800%;
-            margin-top: 450px;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>splash_screen</title>
 
-        #main2 {
-            font-size: 1800%;
-            margin-top: -220px;
-            margin-left: 400px;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Single+Day&family=Sunflower:wght@300&display=swap"
+          rel="stylesheet">
 
-        #main3 {
-            font-size: 250%;
-            text-align: center;
-        }
-    </style>
+
 </head>
+
 <body>
-    <div>
-        <h1 id="main">Voca</h1>
-        <h1 id="main2">Test</h1>
-        <p id="main3">화면을 터치해 주세요</p>
+<!-- Loader -->
+<div class="jua-regular">
+    <div class="loader">
+        <span class="loader-text">Memorize</span>
+        <span class="loader-text">Voca</span>
+        <span class="loader-text">Project</span>
     </div>
+</div>
+
+<!-- Click message -->
+<div class="click-message">
+    화면을 터치해주세요
+</div>
+
+<script>
+    document.body.addEventListener('click', function () {
+        // Redirect to another page when the body is clicked
+        window.location.href = '/App/login'; // Replace with your target URL
+    });
+</script>
 </body>
+
 </html>

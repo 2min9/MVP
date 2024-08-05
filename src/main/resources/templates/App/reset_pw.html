@@ -6,13 +6,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reset_pw</title>
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+            top: 30%;
+            position: relative;
+            font-size: 1.5em;
+            font-weight: 800;
+            border-radius: 20px;
+        }
+        .modal-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 21px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
-<form class="form" method="post" action="">
-    <p class="title">Reset_password </p>
+<form class="form" id="resetForm" method="post" action="/reset_pw">
+    <p class="title">Reset_password</p>
 
-    <h3 style="margin-top: -3%;">비밀번호를 재설정 할 수 있습니다. </h3>
+    <h3 style="margin-top: -3%;">비밀번호를 재설정 할 수 있습니다.</h3>
 
     <label>
         <input class="input" type="password" id="password" name="userPassword" placeholder="" required>
@@ -20,40 +61,75 @@
     </label>
 
     <label>
-        <input class="input" type="password" id="password2" name="userPassword2" placeholder="" required>
+        <input class="input" type="password" id="password2" placeholder="" required>
         <span>Confirm New password</span>
     </label>
     <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
-    <button class="submit">Reset Password</button>
+    <button class="submit" type="submit">Reset Password</button>
     <button class="back">Back</button>
 </form>
 
+<!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <p>비밀번호가 변경되었습니다</p>
+        <button id="confirmBtn" class="modal-button">확인</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function passConfirm() {
-        var password = document.getElementById('password').value;                    //비밀번호
-        var passwordConfirm = document.getElementById('password2').value;  //비밀번호 확인 값
-        var confirmMsg = document.getElementById('confirmMsg');                //확인 메세지
+        var password = $('#password').val();
+        var passwordConfirm = $('#password2').val();
+        var confirmMsg = $('#confirmMsg');
 
         if (password === passwordConfirm && password !== "") {
-            confirmMsg.style.color = 'green';
-            confirmMsg.innerHTML = "비밀번호 일치";  // innerHTML : HTML 내부에 추가적인 내용을 넣을 때 사용하는 것.
+            confirmMsg.css('color', 'green').text("비밀번호 일치");
         } else {
-            confirmMsg.style.color = 'red';
-            confirmMsg.innerHTML = "비밀번호 불일치";
+            confirmMsg.css('color', 'red').text("비밀번호 불일치");
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var passwordField = document.getElementById('password');
-        var passwordConfirmField = document.getElementById('password2');
+    $(document).ready(function() {
+        $('#password').on('blur', passConfirm);
+        $('#password2').on('input', passConfirm);
 
-        passwordField.addEventListener('blur', passConfirm);
-        passwordConfirmField.addEventListener('input', passConfirm);
+        // Handle form submission
+        $('#resetForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                data: $(this).serialize(),
+                success: function(response) {
+                    showModal();
+                },
+                error: function(err) {
+                    console.log("Sign up failed", err);
+                }
+            });
+        });
+
+        // Show the modal
+        function showModal() {
+            $('#myModal').show();
+        }
+
+        // When the user clicks the confirm button, redirect to /App/login
+        $('#confirmBtn').on('click', function() {
+            window.location.href = '/App/login';
+        });
+
+        // Prevent clicks outside the modal from closing it
+        $(window).on('click', function(event) {
+            if ($(event.target).is('#myModal')) {
+                event.stopPropagation(); // Prevent click propagation
+            }
+        });
     });
 </script>
 </body>
 
 </html>
-
-<!-- 비밀번호 찾기에서 비밀번호 재설정 -->
-<!-- findPW > resetPW -->

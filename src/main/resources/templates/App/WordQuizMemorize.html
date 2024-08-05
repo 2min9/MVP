@@ -1,106 +1,404 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <link href="../../css/remember.css" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>단어외우기</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>단어 외우기</title>
+
+    <!-- jQuery 라이브러리 포함 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="../../assets/css/templatemo-scholar.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Single+Day&family=Sunflower:wght@300&display=swap"
+          rel="stylesheet">
+
+    <style>
+        .bottom_bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            height: 6%;
+            background: #F9F9F9;
+            box-shadow: 0px -1px 1px 0px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            left: 0;
+            bottom: 0;
+        }
+
+        .jua-regular {
+            font-family: "Jua", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @media (max-width: 767px) {
+            .responsive-margin {
+                margin-left: 20%;
+            }
+
+            .events .item {
+                margin-top: -10%;
+                padding: 0;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .btn-area {
+                text-align: center;
+            }
+
+            .btn-area2 {
+                margin-top: 10%;
+            }
+
+            .responsive-margin {
+                margin-top: 5%;
+            }
+
+            .events .item ul li:nth-of-type(2) {
+                margin-left: 5%;
+                margin-top: 5%;
+            }
+
+            .events .item .image img {
+                top: 0px;
+            }
+
+            .events .item {
+                margin-top: -3%;
+                padding: 0 0 40px 40px;
+            }
+        }
+
+        /* answer input */
+        .form-control {
+            position: relative;
+            margin: 20px 0 40px;
+            width: 190px;
+        }
+
+        .form-control input {
+            background-color: transparent;
+            border: 0;
+            border-bottom: 2px #fff solid;
+            display: block;
+            width: 100%;
+            padding: 15px 0;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .form-control input:focus,
+        .form-control input:valid {
+            outline: 0;
+            border-bottom-color: lightblue;
+        }
+
+        .form-control label {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .form-control label span {
+            display: inline-block;
+            font-size: 18px;
+            min-width: 5px;
+            color: #fff;
+            transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .form-control input:focus+label span,
+        .form-control input:valid+label span {
+            color: lightblue;
+            transform: translateY(-30px);
+        }
+
+        .item {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* inputbox */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            /* background: #333333; */
+            background-image: url(../../assets/images/wood3.jpg);
+            background-size: cover;
+            border-radius: 5px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8.2px);
+            -webkit-backdrop-filter: blur(8.2px);
+            border: 1px solid #fff;
+            width: 30em;
+            height: 20em;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .form p {
+            color: #fff;
+            font-weight: bolder;
+            font-size: 2em;
+            margin-bottom: 3%;
+        }
+
+        .inp {
+            margin-left: 10%;
+            margin-right: 10%;
+            white-space: 4px;
+        }
+
+        .input+.input {
+            margin-left: 0.5em
+        }
+
+        .input {
+            color: #fff;
+            height: 2em;
+            width: 100%;
+            float: left;
+            text-align: center;
+            background: #00000000;
+            outline: none;
+            border: 1px #fff solid;
+            border-radius: 5px;
+            transition: all 0.6s ease;
+            font-size: larger;
+        }
+
+        .input:focus {
+            outline: none;
+            border: 1px #fff solid;
+        }
+
+        .form button {
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #00000000;
+            color: #fff;
+            width: 8.5em;
+            height: 2.3em;
+            border: #fff 0.1em solid;
+            border-radius: 5px;
+            transition: all 0.5s ease;
+        }
+
+        .form button:hover {
+            background-color: #fff;
+            color: #000
+        }
+
+        .input.full {
+            background-color: #ffffff7e;
+        }
+
+        /* OX 모달 CSS */
+        .OX {
+            width: 10%;
+            height: 10%;
+        }
+
+        .O {
+            position: relative;
+            opacity: 0.7;
+            z-index: 2;
+            top: -30em;
+            left: 29%;
+            width: 950%;
+        }
+                /* 애니메이션 정의 */
+        @keyframes fadeOut {
+            0% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 0.7;
+                display: none;
+                /* 애니메이션이 끝나면 display: none; */
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+            /* 1초 동안 애니메이션 실행 */
+        }
+
+        .DetailOn {}
+    </style>
 </head>
+
 <body>
-<div class="header">
-    <img src="../../img/left-arrow.png" alt="" class="back" onclick="location.href='메인페이지'">
-    <div class="title">
-        <h2 class="NAME">단어외우기</h2>
-    </div>
-</div>
 
-
-<!-- 단어 표시 -->
-<div th:if="${word}">
-    <div class="area">
-        <div class="word_area">
-            <img id="btn-read" class="sound" src="../../img/sound3.png"/>
-            <h2 id="word-name" th:text="${word.wordName}">abcdefghijk</h2>
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">
+                        <h1 class="jua-regular">M.V.P.</h1>
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                </nav>
+            </div>
         </div>
-         <p th:text="${word.wordMean}"></p>
-        <!-- 퀴즈 모드 여부에 따른 처리 -->
-        <div th:if="${quizMode}" class="answer_area">
-            <form action="#" th:action="@{/checkAnswerMemorize}" method="post">
-                <input type="hidden" name="wordIdx" th:value="${word.idx}" />
-                <input type="text" id="userAnswer" name="userAnswer" required />
-                <button type="submit">등록</button>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<div class="main-banner" id="top" style="padding: 90px 0 0 0;"> </div>
+
+
+<div class="section events" id="events" style="margin-top: 10px;">
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-lg-12 text-center" > -->
+            <div class="section-heading" style="margin-bottom: 3.5em;">
+                <h2 class="jua-regular" style="margin: 0; margin-left: 3%;">단어 외우기</h2>
+
+            </div>
+        </div>
+        <!-- 문제 나오는 곳 + 적는곳 -->
+        <div class="item" style="margin-bottom: 15%;">
+            <form class="form" th:action="@{/checkAnswerMemorize}" method="post">
+                <div style="position: absolute; top: 8%; left: 5%;">
+                    <img src="../../assets/images/sound3.png" style="width: 50px; margin-top: -1em;" id="btn-read" class="sound">
+                </div>
+                <div class="content">
+                    <p align="center" id="word-name" th:text="${word.wordName}">margin-top</p>
+                    <input type="hidden" name="wordIdx" th:value="${word.idx}" />
+                    <div class="inp">
+                        <!-- 단어 10개로 제한 -> 단어 길이 받아와서 해야할듯 -->
+                        <input maxlength="10" class="input" type="text" id="otpInput" name="userAnswer" required>
+                    </div>
+                    <button type="submit">Submit</button>
+                </div>
             </form>
-            <!-- 결과 메시지 표시 -->
-            <!-- 여기에다가 결과메시지가 나오니 이미지를 띄우면 될거 같은데 -->
         </div>
     </div>
+</div>
+</div>
 
-    <div th:if="${resultMessage} or ${resultMessage2}">
-        유사 단어 : <span th:text="${word.wordSimilar}">단어단어단어</span>
-        <form action="#" th:action="@{/App/Quiz/NextMemorize}" method="get">
-            <button type="submit">다음</button>
-        </form>
+<div class="btn-area" style="margin-bottom: -8%;">
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+        <div class="col-lg-5 align-self-center">
+            <div class="section-heading">
+                <div class="main-button">
+                    <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
+                            src="../../assets/images/left-arrow.png" style="width: 30px; margin-bottom: 3px;"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5 align-self-center">
+            <div class="section-heading">
+                <div class="main-button">
+                    <a href="/App/Quiz/Memorize" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
+                            src="../../assets/images/right-arrow.png" style="width: 30px; margin-bottom: 3px;"></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- OX 모달 -->
 <div class="OX">
-    <!--    <img th:if="${resultMessage}" src="../../static/img/O.png" alt="" class="O"  id="resultImage" >-->
-<!--    <img th:src="@{../../img/O.png}" th:style="${resultMessage != null} ? 'display:block;' : 'display:none;'" class="O" alt="Test Image">-->
-<!--    <img th:src="@{../../img/X.png}" th:style="${resultMessage2 != null} ? 'display:block;' : 'display:none;'" class="O" alt="Test Image">-->
-    <img th:src="@{../img/O.png}" th:style="${resultMessage != null} ? 'display:block;' : 'display:none;'" class="O" id="resultImageO" alt="Test Image">
-    <img th:src="@{../img/X.png}" th:style="${resultMessage2 != null} ? 'display:block;' : 'display:none;'" class="X" id="resultImageX" alt="Test Image">
+    <img th:src="@{../../assets/images/O.png}" th:style="${resultMessage != null} ? 'display:block;' : 'display:none;'" class="O"
+         id="resultImageO" alt="Test Image">
+    <img th:src="@{../../assets/images/X.png}" th:style="${resultMessage2 != null} ? 'display:block;' : 'display:none;'"
+         class="O" id="resultImageX" alt="Test Image">
 </div>
 
-<div id="footer">
-    <div class="home" id="homeIcon">
-        <!-- 홈 -->
-        <img src="../../icon/house1.png" class="img1" id="homeImg" alt="icon">
-        <p id="homeText" style="color: #919299;">홈</p>
+
+<!-- under bar -->
+<div id="app">
+    <div class="router-view">
+        <!-- This is where the router-view content will be rendered -->
     </div>
-    <div class="note" id="noteIcon">
-        <!-- 오답노트 -->
-        <img src="../../icon/note3.png" class="img2" id="noteImg" alt="icon">
-        <p id="noteText" style="color: #919299;">오답노트</p>
-    </div>
-    <div class="mypage" id="mypageIcon">
-        <!-- 마이페이지 -->
-        <img src="../../icon/user1.png" class="img3" id="mypageImg" alt="icon">
-        <p id="mypageText" style="color: #919299;">내 정보</p>
-    </div>
-    <div class="ranking" id="rankingIcon">
-        <!-- 랭킹 -->
-        <img src="../../icon/ranking1.png" class="img4" id="rankingImg" alt="icon">
-        <p id="rankingText" style="color: #919299;">랭킹</p>
+    <div class="bottom_bar">
+        <svg onclick="goToCategoryChoice()" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+             viewBox="0 0 512.001 512.001" style="enable-background:new 0 0 512.001 512.001;" xml:space="preserve"
+             width="24" height="24" fill="gray">
+                <g>
+                    <path
+                            d="M490.134,185.472L338.966,34.304c-45.855-45.737-120.076-45.737-165.931,0L21.867,185.472   C7.819,199.445-0.055,218.457,0,238.272v221.397C0.047,488.568,23.475,511.976,52.374,512h407.253   c28.899-0.023,52.326-23.432,52.373-52.331V238.272C512.056,218.457,504.182,199.445,490.134,185.472z M448,448H341.334v-67.883   c0-44.984-36.467-81.451-81.451-81.451c0,0,0,0,0,0h-7.765c-44.984,0-81.451,36.467-81.451,81.451l0,0V448H64V238.272   c0.007-2.829,1.125-5.541,3.115-7.552L218.283,79.552c20.825-20.831,54.594-20.835,75.425-0.01c0.003,0.003,0.007,0.007,0.01,0.01   L444.886,230.72c1.989,2.011,3.108,4.723,3.115,7.552V448z" />
+                </g>
+            </svg>
+        <svg onclick="goToRankingPage()" xmlns="http://www.w3.org/2000/svg" id="Layer_1" viewBox="0 0 24 24"
+             width="24" height="24" fill="gray">
+            <path
+                    d="m21.95,5.551l-3.485-3.485C17.143.743,15.385.015,13.515.015h-4.515C6.727.015,4.737,1.55,4.163,3.747c-.14.534.18,1.081.714,1.221.538.137,1.082-.181,1.22-.715.345-1.317,1.539-2.238,2.903-2.238h4.515c.165,0,.323.032.485.047v4.953c0,1.654,1.346,3,3,3h4.951c.016.162.049.322.049.485v8.515c0,1.654-1.346,3-3,3h-10c-.69,0-1.338-.228-1.875-.657-.43-.343-1.059-.276-1.406.154-.345.432-.276,1.061.155,1.406.882.707,1.992,1.097,3.125,1.097h10c2.757,0,5-2.243,5-5v-8.515c0-1.869-.728-3.627-2.05-4.949Zm-4.95,2.464c-.551,0-1-.448-1-1V2.698c.376.217.735.466,1.05.781l3.485,3.485c.311.311.559.672.776,1.05h-4.312Zm-7,7.985h8c.552,0,1,.447,1,1s-.448,1-1,1h-8c-.552,0-1-.447-1-1s.448-1,1-1Zm-3,2.847v-4.75c.907-.734,1.5-1.842,1.5-3.097,0-2.206-1.794-4-4-4S.5,8.794.5,11c0,1.255.593,2.363,1.5,3.097v4.75c0,.623.791.89,1.169.395l1.331-1.743,1.331,1.743c.378.495,1.169.228,1.169-.395Zm-2.5-9.847c1.103,0,2,.897,2,2s-.897,2-2,2-2-.897-2-2,.897-2,2-2Zm6.5,5c-.552,0-1-.447-1-1s.448-1,1-1h7c.552,0,1,.447,1,1s-.448,1-1,1h-7Z" />
+        </svg>
+        <svg onclick="goToMyPage()" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="24"
+             height="24" fill="gray">
+            <path d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
+            <path
+                    d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
+        </svg>
     </div>
 </div>
-</body>
+
+<div th:if="${resultMessage2 != null}">
+    <div th:classappend="${resultMessage2} != 'null' ? 'on'">
+        <span th:text="${word.wordDetail}"></span>
+    </div>
+</div>
+
+<!-- 1초뒤에 이미지 사라지게 하기 -->
 <script>
-    window.onload = function() {
+    window.onload = function () {
         // O 이미지 요소 선택
         var resultImageO = document.getElementById('resultImageO');
         // O 이미지가 존재하면 display 속성을 block으로 변경하고, 1초 후에 애니메이션 추가
         if (resultImageO && resultImageO.style.display === 'block') {
-            setTimeout(function() {
+            setTimeout(function () {
                 resultImageO.classList.add('fadeOut');
-            }, 1000); // 1초 후에 fadeOut 애니메이션 추가
+            }, 300); // 1초 후에 fadeOut 애니메이션 추가
         }
 
         // X 이미지 요소 선택
         var resultImageX = document.getElementById('resultImageX');
         // X 이미지가 존재하면 display 속성을 block으로 변경하고, 1초 후에 애니메이션 추가
         if (resultImageX && resultImageX.style.display === 'block') {
-            setTimeout(function() {
+            setTimeout(function () {
                 resultImageX.classList.add('fadeOut');
-            }, 1000); // 1초 후에 fadeOut 애니메이션 추가
+            }, 300); // 1초 후에 fadeOut 애니메이션 추가
         }
     };
 </script>
-
 <!-- TTS script -->
 <script>
-    $(function(){
-        $('#btn-read').click(function(){
+    $(function () {
+        $('#btn-read').click(function () {
             var wordName = $('#word-name').text().trim();
             speak(wordName, {
                 rate: 1,
@@ -126,50 +424,46 @@
     }
 </script>
 
-<!-- footer script   -->
-<script>
-    // 언더바 스크립트
-    const images = {
-        home: ["../../icon/house1.png", "../../icon/house2.png"],
-        note: ["../../icon/note3.png", "../../icon/note2.png"],
-        mypage: ["../../icon/user1.png", "../../icon/user2.png"],
-        ranking: ["../../icon/ranking1.png", "../../icon/ranking2.png"]
-    };
-
-    let activeIcon = null;
-
-    function resetIcons() {
-        document.getElementById('homeImg').src = images.home[0];
-        document.getElementById('homeText').style.color = '#919299';
-
-        document.getElementById('noteImg').src = images.note[0];
-        document.getElementById('noteText').style.color = '#919299';
-
-        document.getElementById('mypageImg').src = images.mypage[0];
-        document.getElementById('mypageText').style.color = '#919299';
-
-        document.getElementById('rankingImg').src = images.ranking[0];
-        document.getElementById('rankingText').style.color = '#919299';
-    }
-
-    function handleIconClick(icon) {
-        if (activeIcon === icon) {
-            return;
-        }
-
-        resetIcons();
-
-        document.getElementById(icon + 'Img').src = images[icon][1];
-        document.getElementById(icon + 'Text').style.color = '#000';
-        // 눌렀을때 글자 굵게 하는 것
-        document.getElementById(icon + 'Text').style.fontWeight = 600;
-
-        activeIcon = icon;
-    }
-    document.getElementById('homeIcon').addEventListener('click', () => handleIconClick('home'));
-    document.getElementById('noteIcon').addEventListener('click', () => handleIconClick('note'));
-    document.getElementById('mypageIcon').addEventListener('click', () => handleIconClick('mypage'));
-    document.getElementById('rankingIcon').addEventListener('click', () => handleIconClick('ranking'));
+<script th:inline="javascript">
+    var sessionIdx = [[${session.idx}]];
 </script>
+<script>
+    function goToCategoryChoice() {
+        window.location.href = '/main2';
+    }
+
+    function goToRankingPage() {
+        window.location.href = '/rankings';
+    }
+
+    function goToMyPage() {
+        window.location.href = '/App/MyPage/' + sessionIdx;    }
+</script>
+
+
+<!-- 단어 길이 제한 -> 단어 길이 받아와서 해야할듯 -->
+<!-- answer input maxmium -->
+<script>
+    const input = document.getElementById('otpInput');
+
+    input.addEventListener('input', function () {
+        if (input.value.length === 8) {
+            input.classList.add('full');
+        } else {
+            input.classList.remove('full');
+        }
+    });
+</script>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<script src="../../vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../assets/js/isotope.min.js"></script>
+<script src="../../assets/js/owl-carousel.js"></script>
+<script src="../../assets/js/counter.js"></script>
+<script src="../../assets/js/custom.js"></script>
+
+</body>
 
 </html>

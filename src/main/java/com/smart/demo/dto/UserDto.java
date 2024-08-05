@@ -43,7 +43,6 @@ public class UserDto {
     private char userAble;
     private String userUuid;
     private LocalDateTime created_time;
-    private boolean passwordPresent;  // 비밀번호 제공 여부
 
     public static UserDto toUserDto(UserEntity userEntity) {
         UserDto userDto = new UserDto();
@@ -58,8 +57,6 @@ public class UserDto {
         userDto.setUserAble(userEntity.getUserAble());
         userDto.setUserUuid(userEntity.getUserUuid());
         userDto.setCreated_time(userEntity.getCreatedTime());
-        userDto.setPasswordPresent(false);  // 초기값 설정
-
         return userDto;
     }
 }

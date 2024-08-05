@@ -33,16 +33,6 @@ public class WordService {
         return wordDtoList;
     }
 
-//    public WordDto findById(Long words_idx) {
-//        Optional<WordEntity> optionalWordEntity = wordRepository.findById(words_idx);
-//        if(optionalWordEntity.isEmpty()) {
-//            WordEntity wordEntity = optionalWordEntity.get();
-//            WordDto wordDto = WordDto.toWordDto(wordEntity);
-//            return wordDto;
-//        } else {
-//            return null;
-//        }
-//    }
     public WordDto findById(Integer idx) {
         Optional<WordEntity> optionalWordEntity = wordRepository.findById(idx);
         if(optionalWordEntity.isPresent()) {
@@ -79,31 +69,6 @@ public class WordService {
         wordRepository.deleteById(idx);
     }
 
-    public WordDto findRandomWord(List<Integer> solvedWords) {
-        List<WordEntity> wordEntityList = wordRepository.findAll();
-
-        if (wordEntityList.isEmpty()) {
-            return null; // 단어가 없을 경우 처리
-        }
-
-        // 제외할 단어를 필터링
-        List<WordEntity> filteredList = wordEntityList.stream()
-                .filter(word -> solvedWords == null || !solvedWords.contains(word.getIdx()))
-                .collect(Collectors.toList());
-
-        if (filteredList.isEmpty()) {
-            return null; // 모든 단어가 제외된 경우 처리
-        }
-
-        // 랜덤 인덱스 생성
-        Random random = new Random();
-        int randomIndex = random.nextInt(filteredList.size());
-
-        // 랜덤으로 선택된 단어 반환
-        WordEntity randomWordEntity = filteredList.get(randomIndex);
-        return WordDto.toWordDto(randomWordEntity);
-    }
-
     public List<WordDto> findByWordLevel(int wordLevel) {
         return wordRepository.findByWordLevel(wordLevel)
                 .stream()
@@ -111,7 +76,7 @@ public class WordService {
                 .collect(Collectors.toList());
     }
 
-    public WordDto findRandomWordFromList(List<WordDto> wordList, List<Integer> solvedWords) {
+    public WordDto findRandomWordFromList(List<WordDto> wordList, List<Integer> solvedWords, String examMode) {
         List<WordDto> unsolvedWords = wordList.stream()
                 .filter(word -> !solvedWords.contains(word.getIdx()))
                 .collect(Collectors.toList());
@@ -120,9 +85,19 @@ public class WordService {
             return null;
         }
 
-        Random random = new Random();
-        return unsolvedWords.get(random.nextInt(unsolvedWords.size()));
+        WordDto randomWord = unsolvedWords.get(new Random().nextInt(unsolvedWords.size()));
+
+        if ("korEng".equals(examMode)) {
+            // 무작위로 의미 선택 (한글 의미를 선택)
+            String[] namings = randomWord.getWordName().split(", ");
+            String selectedNamings = namings[new Random().nextInt(namings.length)];
+            randomWord.setSelectedWordName(selectedNamings); // 한글 의미를 저장
+        }
+
+        return randomWord;
     }
+
+
 
     public WordEntity convertToEntity(WordDto wordDto) {
         WordEntity wordEntity = new WordEntity();
@@ -134,5 +109,12 @@ public class WordService {
         return wordEntity;
     }
 
+
+    public WordEntity findWordEntityById(Integer idx) {
+        WordEntity wordEntity = wordRepository.findById(idx)
+                .orElseThrow(() -> new RuntimeException("WordEntity not found with id " + idx));
+        System.out.println("Debug: Found WordEntity: " + wordEntity); // Debug statement
+        return wordEntity;
+    }
 
 }

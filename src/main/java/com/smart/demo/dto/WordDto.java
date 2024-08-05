@@ -25,6 +25,8 @@ public class WordDto {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 
+    private String selectedWordName;
+
     public WordDto(Integer idx, String wordName, String wordMean) {
         this.idx = idx;
         this.wordName = wordName;
@@ -47,4 +49,5 @@ public class WordDto {
                 .updatedTime(wordEntity.getUpdatedTime())
                 .build();
     }
+
 }

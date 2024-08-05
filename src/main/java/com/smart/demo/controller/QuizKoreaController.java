@@ -71,13 +71,14 @@ public class QuizKoreaController {
     public String randomQuizMemorizeKorea(Model model, HttpSession session) {
         List<Integer> solvedWords = (List<Integer>) session.getAttribute("solvedWords");
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
+        String examMode = (String) session.getAttribute("examMode");
 
         // 풀었던 단어 목록을 초기화하거나, 최초 접근인 경우에는 생성
         if (solvedWords == null) {
             solvedWords = new ArrayList<>();
         }
 
-        WordDto randomWord = wordService.findRandomWordFromList(wordList, solvedWords);
+        WordDto randomWord = wordService.findRandomWordFromList(wordList, solvedWords, examMode);
         if (randomWord != null) {
             model.addAttribute("word", randomWord);
             model.addAttribute("quizMode", true); // 퀴즈 모드를 설정하여 화면에서 조건 처리할 수 있도록 함
@@ -132,7 +133,7 @@ public class QuizKoreaController {
     public String randomQuizKorea(Model model, HttpSession session) {
         List<Integer> solvedWords = (List<Integer>) session.getAttribute("solvedWords");
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
-
+        String examMode = (String) session.getAttribute("examMode");
         // 풀었던 단어 목록을 초기화하거나, 최초 접근인 경우에는 생성
         if (solvedWords == null) {
             solvedWords = new ArrayList<>();
@@ -143,7 +144,7 @@ public class QuizKoreaController {
             solvedWords.clear();
         }
 
-        WordDto randomWord = wordService.findRandomWordFromList(wordList, solvedWords);
+        WordDto randomWord = wordService.findRandomWordFromList(wordList, solvedWords, examMode);
         if (randomWord != null) {
             model.addAttribute("word", randomWord);
             model.addAttribute("quizMode", true); // 퀴즈 모드를 설정하여 화면에서 조건 처리할 수 있도록 함
@@ -164,33 +165,6 @@ public class QuizKoreaController {
             // 단어가 없을 경우 처리
             return "redirect:/Admin/Word"; // 리스트 페이지로 이동
         }
-    }
-
-    @PostMapping("/checkAnswerKorea")
-    public String checkAnswerKorea(@RequestParam Integer wordIdx, @RequestParam String userAnswer, Model model, HttpSession session) {
-        // 단어 ID를 사용하여 정답을 가져옵니다.
-        WordDto wordDto = wordService.findById(wordIdx);
-
-        if (wordDto != null) {
-            String[] meanings = wordDto.getWordMean().split(", ");
-            boolean isCorrect = Arrays.stream(meanings)
-                    .anyMatch(meaning -> meaning.equalsIgnoreCase(userAnswer));
-            if (isCorrect) {
-                model.addAttribute("resultMessage", "정답입니다!");
-            } else {
-                model.addAttribute("resultMessage2", "틀렸습니다. 정답은 " + wordDto.getWordMean() + "입니다.");
-            }
-        } else {
-            model.addAttribute("resultMessage", "단어를 찾을 수 없습니다.");
-        }
-
-        // 퀴즈 모드를 유지하고 답 검증 결과를 표시합니다.
-        model.addAttribute("word", wordDto);
-        model.addAttribute("quizMode", true);
-        model.addAttribute("solvedCount", session.getAttribute("solvedCount"));
-        model.addAttribute("lastQuestion", session.getAttribute("solvedCount").equals(30));
-
-        return "App/WordQuizResultKorea";
     }
 
     // 새로운 퀴즈 문제를 불러오는 메서드 추가

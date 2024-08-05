@@ -5,45 +5,47 @@
     <link href="../../css/signup.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>reset_pw</title>
+    <title>Reset Password</title>
 </head>
 
 <body>
-<form class="form" method="post" action="">
-    <p class="title">Reset_password </p>
+<form class="form" method="post" th:action="@{/reset_pw/{idx}(idx=${user.idx})}">
+    <input type="hidden" name="idx" th:value="${user.idx}"> <!-- idx를 폼 데이터로 포함 -->
+    <input type="hidden" name="userEmail" th:value="${user.userEmail}">
+    <h3 style="margin-top: -3%;">비밀번호를 재설정 할 수 있습니다.</h3>
 
     <label>
-        <input class="input" type="password" id="password" name="userPassword" placeholder="" required>
-        <span>New password</span>
+        <input class="input" type="password" id="password" name="userPassword" required>
+        <span>New Password</span>
     </label>
 
     <label>
-        <input class="input" type="password" id="password2" name="userPassword2" placeholder="" required>
-        <span>Confirm New password</span>
+        <input class="input" type="password" id="confirmPassword" name="confirmPassword" required>
+        <span>Confirm New Password</span>
     </label>
     <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
-    <button class="submit">Reset Password</button>
-    <button class="back">Back</button>
+    <button class="submit" type="submit">Reset Password</button>
+    <button class="back" type="button" onclick="window.history.back();">Back</button>
 </form>
 
 <script>
     function passConfirm() {
-        var password = document.getElementById('password').value;                    //비밀번호
-        var passwordConfirm = document.getElementById('password2').value;  //비밀번호 확인 값
-        var confirmMsg = document.getElementById('confirmMsg');                //확인 메세지
+        var password = document.getElementById('password').value;
+        var passwordConfirm = document.getElementById('confirmPassword').value;
+        var confirmMsg = document.getElementById('confirmMsg');
 
         if (password === passwordConfirm && password !== "") {
             confirmMsg.style.color = 'green';
-            confirmMsg.innerHTML = "비밀번호 일치";  // innerHTML : HTML 내부에 추가적인 내용을 넣을 때 사용하는 것.
+            confirmMsg.innerHTML = "Passwords match";
         } else {
             confirmMsg.style.color = 'red';
-            confirmMsg.innerHTML = "비밀번호 불일치";
+            confirmMsg.innerHTML = "Passwords do not match";
         }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         var passwordField = document.getElementById('password');
-        var passwordConfirmField = document.getElementById('password2');
+        var passwordConfirmField = document.getElementById('confirmPassword');
 
         passwordField.addEventListener('blur', passConfirm);
         passwordConfirmField.addEventListener('input', passConfirm);
@@ -52,6 +54,3 @@
 </body>
 
 </html>
-
-<!-- 비밀번호 찾기에서 비밀번호 재설정 -->
-<!-- findPW > resetPW -->

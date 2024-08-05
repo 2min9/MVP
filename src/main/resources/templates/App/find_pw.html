@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<form class="form" method="post" action="">
+<form class="form" method="post" action="/find_pw">
     <p class="title">Find_Password </p>
     <label>
         <input class="input" name="userEmail" type="text" placeholder="" required>
@@ -25,10 +25,9 @@
         <input class="input" name="userPhone" type="tel" placeholder="" required>
         <span>Phone</span>
     </label>
-    <button class="submit" type="submit" >Reset Password</button>
+    <button class="submit" type="submit">Reset Password</button>
     <button class="back">Back</button>
-    <button class="back" onclick="location.href='/App/reset_pw'">테스트 버튼</button>
-    <a class="signin" href="#">login</a>
+    <a class="signin" href="/App/login">login</a>
 </form>
 </body>
 

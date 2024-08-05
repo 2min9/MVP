@@ -4,16 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>word_memorize</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>word_test</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-<!--    &lt;!&ndash; Vue Files &ndash;&gt;-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/vue-router@3/dist/vue-router.js"></script>-->
 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="../../assets/css/fontawesome.css">
@@ -65,38 +60,6 @@
                 text-align: center;
                 margin-bottom: 15%;
             }
-        }
-
-        /* modal */
-        .modal-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-footer .btn {
-            font-size: 18px;
-            padding: 10px 20px;
-        }
-
-        .modal-footer .btn-primary-next {
-            font-size: 18px;
-            /* Larger font size for next button */
-            padding: 10px 20px;
-            /* Larger padding for next button */
-        }
-
-        .modal-footer-right {
-            display: flex;
-            justify-content: flex-end;
-            /* Align items to the right */
-            align-items: center;
-            width: 100%;
-        }
-
-        .modal-footer-right .btn-secondary {
-            margin-left: auto;
-            /* Pushes the X button to the right */
         }
 
 
@@ -171,6 +134,10 @@
             transition: 0.25s cubic-bezier(0, 0, 0, 1);
         }
 
+        .pro_area {
+            margin-top: 10px;
+        }
+
         @media (min-width: 1200px) {
             .pro_area {
                 display: flex;
@@ -188,24 +155,34 @@
                 width: 20%;
             }
         }
+        .diff {
+            display: flex;
+            float: right;
+            font-size: 0.8em;
+        }
     </style>
 </head>
 
 <body>
-<div style="width: 100%; text-align: right;" class="info_btn">
-    <!-- Button to trigger first modal -->
-    <a class="btn btn-light" data-bs-toggle="modal" href="#modalLevel1" role="button"
-       style="margin-top: 5%; margin-right: 5%; margin-bottom: 3%; padding: 2%;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-info-circle"
-             viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-            <path
-                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-        </svg>
-    </a>
-</div>
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">
+                        <h1 class="jua-regular">M.V.P.</h1>
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
 
-<!-- 문제 수 선택 -->
+<div class="main-banner" id="top" style="padding: 90px 0 0 0;"></div>
 <form id="testForm" action="/startTest" method="get">
     <div class="pro_area">
         <div class="wrapper" id="questionCount">
@@ -241,9 +218,7 @@
             </div>
         </div>
     </div>
-
-    <!-- 단계 선택 -->
-    <div class="section" style="margin-top: 50px;">
+    <div class="section" style="margin-top: 7%;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-1">
@@ -258,20 +233,25 @@
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                                  data-bs-parent="#accordionExample">
-                                <div class="accordion-body" onclick="submitForm(1)" style="margin-top: 1.6em">
-                                    <span class="span">1단계</span>
+                                <div class="accordion-body" onclick="submitForm(1, 'korEng')" style="margin-top: 1.6em;">
+                                    1단계
+                                    <span class="diff">초등학생 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(2)">
-                                    <span class="span">2단계</span>
+                                <div class="accordion-body" onclick="submitForm(2, 'korEng')">
+                                    2단계
+                                    <span class="diff">중학생 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(3)">
-                                    <span class="span">3단계</span>
+                                <div class="accordion-body" onclick="submitForm(3, 'korEng')">
+                                    3단계
+                                    <span class="diff">고1, 2 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(4)">
-                                    <span class="span">4단계</span>
+                                <div class="accordion-body" onclick="submitForm(4, 'korEng')">
+                                    4단계
+                                    <span class="diff">고3, 수능 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(5)">
-                                    <span class="span">5단계</span>
+                                <div class="accordion-body" onclick="submitForm(5, 'korEng')">
+                                    5단계
+                                    <span class="diff">TOEIC 수준</span>
                                 </div>
                             </div>
                         </div>
@@ -284,34 +264,37 @@
                                     영어 &rarr; 한글
                                 </button>
                             </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingOne"
                                  data-bs-parent="#accordionExample">
-                                <div class="accordion-body" onclick="submitForm(1)" style="margin-top: 1.6em">
-                                    <span class="span">1단계</span>
+                                <div class="accordion-body" onclick="submitForm(1, 'engKor')" style="margin-top: 1.6em;">
+                                    1단계
+                                    <span class="diff">초등학생 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(2)">
-                                    <span class="span">2단계</span>
+                                <div class="accordion-body" onclick="submitForm(2, 'engKor')">
+                                    2단계
+                                    <span class="diff">중학생 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(3)">
-                                    <span class="span">3단계</span>
+                                <div class="accordion-body" onclick="submitForm(3, 'engKor')">
+                                    3단계
+                                    <span class="diff">고1, 2 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(4)">
-                                    <span class="span">4단계</span>
+                                <div class="accordion-body" onclick="submitForm(4, 'engKor')">
+                                    4단계
+                                    <span class="diff">고3, 수능 수준</span>
                                 </div>
-                                <div class="accordion-body" onclick="submitForm(5)">
-                                    <span class="span">5단계</span>
+                                <div class="accordion-body" onclick="submitForm(5, 'engKor')">
+                                    5단계
+                                    <span class="diff">TOEIC 수준</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="wordLevel" value="">
+            <input type="hidden" name="examMode" value="">
         </div>
     </div>
-
-    <!-- hidden input for wordLevel -->
-    <input type="hidden" name="wordLevel" value="">
-
 </form>
         <div class="center_area">
             <div class="buttons">
@@ -321,122 +304,6 @@
             </div>
         </div>
 
-        <!-- modal test -->
-
-        <!-- Level 1 Modal -->
-        <div class="modal fade" id="modalLevel1" tabindex="-1" aria-labelledby="modalLevel1Label"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLevel1Label">Level 1</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        초등학생 난이도
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal"
-                                aria-label="Close">&times;</button>
-                        <button class="btn btn-primary btn-primary-next" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel2">&rarr;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Level 2 Modal -->
-        <div class="modal fade" id="modalLevel2" tabindex="-1" aria-labelledby="modalLevel2Label"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLevel2Label">Level 2</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        중학생 난이도
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel1">&larr;</button>
-                        <button class="btn btn-primary btn-primary-next" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel3">&rarr;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Level 3 Modal -->
-        <div class="modal fade" id="modalLevel3" tabindex="-1" aria-labelledby="modalLevel3Label"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLevel3Label">Level 3</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        고 1,2 난이도
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel2">&larr;</button>
-                        <button class="btn btn-primary btn-primary-next" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel4">&rarr;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Level 4 Modal -->
-        <div class="modal fade" id="modalLevel4" tabindex="-1" aria-labelledby="modalLevel4Label"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLevel4Label">Level 4</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        고3, 수능 난이도
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel3">&larr;</button>
-                        <button class="btn btn-primary btn-primary-next" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel5">&rarr;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Level 5 Modal -->
-        <div class="modal fade" id="modalLevel5" tabindex="-1" aria-labelledby="modalLevel5Label"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLevel5Label">Level 5</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        토익(TOEIC) 난이도
-                    </div>
-                    <div class="modal-footer modal-footer-right">
-                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalLevel4">&larr;</button>
-                        <button class="btn btn-secondary" data-bs-dismiss="modal"
-                                aria-label="Close">&times;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <!-- end modal test -->
-
 
         <!-- under bar -->
         <div id="app">
@@ -445,54 +312,51 @@
             </div>
             <div class="bottom_bar">
                 <svg onclick="goToCategoryChoice()" xmlns="http://www.w3.org/2000/svg"
-                     version="1.1" id="Capa_1" x="0px" y="0px"
+                     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
                      viewBox="0 0 512.001 512.001" style="enable-background:new 0 0 512.001 512.001;"
-                     xml:space="preserve"
-                     width="24" height="24" fill="gray">
-            <g>
-                <path
-                        d="M490.134,185.472L338.966,34.304c-45.855-45.737-120.076-45.737-165.931,0L21.867,185.472   C7.819,199.445-0.055,218.457,0,238.272v221.397C0.047,488.568,23.475,511.976,52.374,512h407.253   c28.899-0.023,52.326-23.432,52.373-52.331V238.272C512.056,218.457,504.182,199.445,490.134,185.472z M448,448H341.334v-67.883   c0-44.984-36.467-81.451-81.451-81.451c0,0,0,0,0,0h-7.765c-44.984,0-81.451,36.467-81.451,81.451l0,0V448H64V238.272   c0.007-2.829,1.125-5.541,3.115-7.552L218.283,79.552c20.825-20.831,54.594-20.835,75.425-0.01c0.003,0.003,0.007,0.007,0.01,0.01   L444.886,230.72c1.989,2.011,3.108,4.723,3.115,7.552V448z" />
-            </g>
-        </svg>
+                     xml:space="preserve" width="24" height="24" fill="gray">
+                        <g>
+                            <path
+                                    d="M490.134,185.472L338.966,34.304c-45.855-45.737-120.076-45.737-165.931,0L21.867,185.472   C7.819,199.445-0.055,218.457,0,238.272v221.397C0.047,488.568,23.475,511.976,52.374,512h407.253   c28.899-0.023,52.326-23.432,52.373-52.331V238.272C512.056,218.457,504.182,199.445,490.134,185.472z M448,448H341.334v-67.883   c0-44.984-36.467-81.451-81.451-81.451c0,0,0,0,0,0h-7.765c-44.984,0-81.451,36.467-81.451,81.451l0,0V448H64V238.272   c0.007-2.829,1.125-5.541,3.115-7.552L218.283,79.552c20.825-20.831,54.594-20.835,75.425-0.01c0.003,0.003,0.007,0.007,0.01,0.01   L444.886,230.72c1.989,2.011,3.108,4.723,3.115,7.552V448z" />
+                        </g>
+                    </svg>
                 <svg onclick="goToRankingPage()" xmlns="http://www.w3.org/2000/svg" id="Layer_1" viewBox="0 0 24 24"
                      width="24" height="24" fill="gray">
                     <path
                             d="m21.95,5.551l-3.485-3.485C17.143.743,15.385.015,13.515.015h-4.515C6.727.015,4.737,1.55,4.163,3.747c-.14.534.18,1.081.714,1.221.538.137,1.082-.181,1.22-.715.345-1.317,1.539-2.238,2.903-2.238h4.515c.165,0,.323.032.485.047v4.953c0,1.654,1.346,3,3,3h4.951c.016.162.049.322.049.485v8.515c0,1.654-1.346,3-3,3h-10c-.69,0-1.338-.228-1.875-.657-.43-.343-1.059-.276-1.406.154-.345.432-.276,1.061.155,1.406.882.707,1.992,1.097,3.125,1.097h10c2.757,0,5-2.243,5-5v-8.515c0-1.869-.728-3.627-2.05-4.949Zm-4.95,2.464c-.551,0-1-.448-1-1V2.698c.376.217.735.466,1.05.781l3.485,3.485c.311.311.559.672.776,1.05h-4.312Zm-7,7.985h8c.552,0,1,.447,1,1s-.448,1-1,1h-8c-.552,0-1-.447-1-1s.448-1,1-1Zm-3,2.847v-4.75c.907-.734,1.5-1.842,1.5-3.097,0-2.206-1.794-4-4-4S.5,8.794.5,11c0,1.255.593,2.363,1.5,3.097v4.75c0,.623.791.89,1.169.395l1.331-1.743,1.331,1.743c.378.495,1.169.228,1.169-.395Zm-2.5-9.847c1.103,0,2,.897,2,2s-.897,2-2,2-2-.897-2-2,.897-2,2-2Zm6.5,5c-.552,0-1-.447-1-1s.448-1,1-1h7c.552,0,1,.447,1,1s-.448,1-1,1h-7Z" />
                 </svg>
-                <svg onclick="goToMyPage()" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="24"
-                     height="24" fill="gray">
+                <svg onclick="goToMyPage()" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24"
+                     width="24" height="24" fill="gray">
                     <path d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
                     <path
                             d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
                 </svg>
             </div>
         </div>
-        <script th:inline="javascript">
-            var sessionIdx = [[${session.idx}]];
-        </script>
-        <script>
-            function goToCategoryChoice() {
-                window.location.href = '/main2';
-            }
-
-            function goToRankingPage() {
-                window.location.href = '/rankings';
-            }
-
-            function goToMyPage() {
-                window.location.href = '/App/MyPage/' + sessionIdx;
-            }
-        </script>
-<script>
-    function submitForm(level) {
-        // 선택된 문제 수와 단계를 폼에 설정
-        document.querySelector('input[name="wordLevel"]').value = level;
-
-        // 폼 제출
-        document.getElementById('testForm').submit();
-    }
+<script th:inline="javascript">
+    var sessionIdx = [[${session.idx}]];
 </script>
 
+<script>
+    function goToCategoryChoice() {
+        window.location.href = '/main2';
+    }
+
+    function goToRankingPage() {
+        window.location.href = '/rankings';
+    }
+
+    function goToMyPage() {
+        window.location.href = '/App/MyPage/' + sessionIdx;
+    }
+</script>
+        <script>
+            function submitForm(level, mode) {
+                document.querySelector('input[name="wordLevel"]').value = level;
+                document.querySelector('input[name="examMode"]').value = mode;
+                document.getElementById('testForm').submit();
+            }
+        </script>
         <!-- Scripts -->
         <!-- Bootstrap core JavaScript -->
         <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -501,6 +365,7 @@
         <script src="../../assets/js/owl-carousel.js"></script>
         <script src="../../assets/js/counter.js"></script>
         <script src="../../assets/js/custom.js"></script>
+
 </body>
 
 </html>

@@ -1,7 +1,6 @@
 package com.smart.demo.entity;
 
 import com.smart.demo.dto.UserDto;
-import com.smart.demo.security.PasswordConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-public class UserEntity extends BaseEntity{
+public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
@@ -26,9 +25,8 @@ public class UserEntity extends BaseEntity{
     @Column
     private String userEmail;
 
-    @Convert(converter = PasswordConverter.class)
     @Column
-    private String userPassword; // PasswordConverter 적용
+    private String userPassword;
 
     @Column
     private String userBirth;
@@ -56,23 +54,6 @@ public class UserEntity extends BaseEntity{
         userEntity.setUserGender(userDto.getUserGender());
         userEntity.setUserAble(userDto.getUserAble());
         userEntity.setUserUuid(UUID.randomUUID().toString());
-
-        return userEntity;
-    }
-
-    public static UserEntity toUpdateUserEntity(UserDto userDto) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setIdx(userDto.getIdx());
-        userEntity.setUserName(userDto.getUserName());
-        userEntity.setUserNickname(userDto.getUserNickname());
-        userEntity.setUserEmail(userDto.getUserEmail());
-        userEntity.setUserPassword(userDto.getUserPassword());
-        userEntity.setUserBirth(userDto.getUserBirth());
-        userEntity.setUserPhone(userDto.getUserPhone());
-        userEntity.setUserGender(userDto.getUserGender());
-        userEntity.setUserAble(userDto.getUserAble());
-        userEntity.setUserUuid(UUID.randomUUID().toString());
-
         return userEntity;
     }
 }

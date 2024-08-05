@@ -3,13 +3,14 @@ package com.smart.demo.controller;
 import com.smart.demo.dto.UserDto;
 import com.smart.demo.entity.UserEntity;
 import com.smart.demo.entity.WordTestEntity;
+import com.smart.demo.repository.UserRepository;
 import com.smart.demo.repository.WordTestRepository;
-import com.smart.demo.service.AuthService;
 import com.smart.demo.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class UserController {
     private final WordTestRepository wordTestRepository;
 
     @Autowired
-    private AuthService authService;
+    private UserRepository userRepository;
 
     @GetMapping("/App/signup")
     public String signupForm() {
@@ -60,11 +61,12 @@ public class UserController {
         return "App/login";
     }
 
-    @PostMapping("App/login")
+    @PostMapping("/App/login")
     public String processLogin(@ModelAttribute UserDto userDto, HttpSession session, HttpServletResponse response) throws IOException {
-        UserDto userResult = authService.login(userDto, session);
+        UserDto userResult = userService.login(userDto, session);
 
         if (userResult != null) {
+            session.setAttribute("nickname", userResult.getUserNickname()); // 여기에 추가
             session.setAttribute("email", userResult.getUserEmail());
             session.setAttribute("idx", userResult.getIdx());
             session.setAttribute("userUuid", userResult.getUserUuid()); // userUuid 추가
@@ -149,25 +151,33 @@ public class UserController {
     }
 
     @GetMapping("/rankings")
-    public String showRankings(Model model) {
+    public String showRankings(Model model, HttpSession session) {
         // WordTestEntity 리스트 가져오기
         List<WordTestEntity> rankings = wordTestRepository.findAll();
+
+        String nickname = (String) session.getAttribute("nickname");
+        model.addAttribute("nickname", nickname);
 
         // 사용자별 최고 점수를 담을 맵
         Map<String, Map<Integer, WordTestEntity>> userBestScores = new HashMap<>();
 
         for (WordTestEntity entity : rankings) {
-            String userEmail = entity.getUserInfo().getUserEmail();
-            int level = entity.getLevel();
+            if (entity.getUserInfo() != null) {  // Null 체크 추가
+                String userEmail = entity.getUserInfo().getUserEmail();
+                int level = entity.getLevel();
 
-            // 사용자의 해당 레벨에서의 최고 점수를 맵에 저장
-            userBestScores.putIfAbsent(userEmail, new HashMap<>());
-            Map<Integer, WordTestEntity> userScores = userBestScores.get(userEmail);
+                // 사용자의 해당 레벨에서의 최고 점수를 맵에 저장
+                userBestScores.putIfAbsent(userEmail, new HashMap<>());
+                Map<Integer, WordTestEntity> userScores = userBestScores.get(userEmail);
 
-            // Null 검사 후 최고 점수를 업데이트
-            WordTestEntity currentBest = userScores.get(level);
-            if (currentBest == null || entity.getTestPoint() > currentBest.getTestPoint()) {
-                userScores.put(level, entity);
+                // Null 검사 후 최고 점수를 업데이트
+                WordTestEntity currentBest = userScores.get(level);
+                if (currentBest == null || entity.getTestPoint() > currentBest.getTestPoint()) {
+                    userScores.put(level, entity);
+                }
+            } else {
+                // getUserInfo()가 null인 경우 로그를 찍거나 처리하는 코드 추가
+                System.out.println("Warning: WordTestEntity has null UserInfo.");
             }
         }
 
@@ -183,11 +193,90 @@ public class UserController {
             rankingsByLevel.add(levelRankings);
         }
 
+        model.addAttribute("user", session);
         model.addAttribute("rankingsByLevel", rankingsByLevel);
 
         return "App/rankings"; // 랭킹 페이지로 이동
     }
 
+    @PostMapping("/find_pw")
+    public String findPw(@RequestParam String userEmail, @RequestParam String userName, @RequestParam String userPhone, HttpSession session) {
+        Optional<UserEntity> userOptional = userRepository.findByUserEmailAndUserNameAndUserPhone(userEmail, userName, userPhone);
+        if (userOptional.isPresent()) {
+            session.setAttribute("userEmail", userEmail); // 세션에 사용자 이메일 저장
+            return "redirect:App/reset_pw";
+        } else {
+            return "redirect:App/find_pw?error"; // 에러 페이지로 리다이렉트
+        }
+    }
 
+    @PostMapping("/reset_pw")
+    public String resetPassword(@RequestParam("userPassword") String newPassword, HttpSession session, HttpServletResponse response) throws IOException {
+        String userEmail = (String) session.getAttribute("userEmail");
 
+        if (userEmail != null) {
+            userService.resetPassword(userEmail, newPassword);
+            session.removeAttribute("userEmail");
+            return "redirect:/App/login";
+        } else {
+            PrintWriter out = response.getWriter();
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/html; charset=utf-8");
+            out.println("<script> alert('Invalid session. Please try again.');");
+            out.println("history.go(-1); </script>");
+            out.close();
+
+            return "App/reset_pw"; // 세션이 유효하지 않을 경우 재설정 페이지로 이동
+        }
+    }
+
+    @GetMapping("/App/mypage-reset_pw/{idx}")
+    public String mypage_reset_pwForm(@PathVariable Integer idx, HttpSession session, Model model) {
+        // 세션에서 userIdx를 가져와서 UserDto 객체를 조회
+        UserDto userDto = userService.findById(idx);
+        if (userDto != null) {
+            model.addAttribute("user", userDto);
+        } else {
+            return "redirect:/login"; // 로그인 페이지로 리디렉션
+        }
+        return "/App/mypage-reset_pw";
+    }
+
+    @PostMapping("/reset_pw/{idx}") // 기존 URL 패턴 유지
+    public String resetPassword(
+            @RequestParam("userPassword") String newPassword,
+            @RequestParam("userEmail") String userEmail,
+            @PathVariable Integer idx,
+            HttpSession session,
+            HttpServletResponse response
+    ) throws IOException {
+        if (userEmail != null) {
+            userService.resetPassword(userEmail, newPassword);
+            session.removeAttribute("userEmail");
+            return "redirect:/App/MyPage/" + idx; // 성공 후 리다이렉트
+        } else {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/html; charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('Invalid session. Please try again.');");
+            out.println("window.location.href='/App/mypage-reset_pw?userEmail=" + userEmail + "';");
+            out.println("</script>");
+            out.close();
+            return null; // 이 라인은 실제로는 도달하지 않음
+        }
+    }
+
+    @PostMapping("/check_password")
+    @ResponseBody
+    public Map<String, Boolean> checkPassword(@RequestBody Map<String, String> request, HttpSession session) {
+        String userEmail = (String) session.getAttribute("email");
+        String inputPassword = request.get("password");
+
+        Map<String, Boolean> response = new HashMap<>();
+        boolean valid = userService.checkPassword(userEmail, inputPassword);
+        response.put("valid", valid);
+
+        return response;
+    }
 }

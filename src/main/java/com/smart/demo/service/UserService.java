@@ -22,10 +22,16 @@ import java.util.UUID;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; // PasswordEncoder를 추가합니다.
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void save(UserDto userDto) {
+        // DTO -> Entity 변환
         UserEntity userEntity = UserEntity.toUserEntity(userDto);
+        // 비밀번호 암호화
+        userEntity.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
+        // 저장
         userRepository.save(userEntity);
     }
 
@@ -33,15 +39,16 @@ public class UserService {
         Optional<UserEntity> byUserEmail = userRepository.findByUserEmail(userDto.getUserEmail());
         if (byUserEmail.isPresent()) {
             UserEntity userEntity = byUserEmail.get();
-            if (userEntity.getUserPassword().equals(userDto.getUserPassword())) {
+            // 비밀번호 비교
+            if (passwordEncoder.matches(userDto.getUserPassword(), userEntity.getUserPassword())) {
                 UserDto dto = UserDto.toUserDto(userEntity);
                 session.setAttribute("userUuid", userEntity.getUserUuid());
                 return dto;
             } else {
-                return null;
+                return null; // 비밀번호 불일치
             }
         } else {
-            return null;
+            return null; // 이메일 존재하지 않음
         }
     }
 
@@ -86,12 +93,6 @@ public class UserService {
         existingUserEntity.setUserAble(userDto.getUserAble());
         existingUserEntity.setUserUuid(userDto.getUserUuid() != null ? userDto.getUserUuid() : existingUserEntity.getUserUuid());
 
-        // 비밀번호가 제공된 경우 업데이트
-        if (userDto.getUserPassword() != null && !userDto.getUserPassword().isEmpty()) {
-            System.out.println("비밀번호 = " + userDto.getUserPassword());
-            existingUserEntity.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
-        }
-
         userRepository.save(existingUserEntity);
         return UserDto.toUserDto(existingUserEntity);
     }
@@ -110,6 +111,33 @@ public class UserService {
         } else {
             //조회 결과가 있다 --> 사용가능하다
             return "OK";
+        }
+    }
+
+    public void resetPassword(String userEmail, String newPassword) {
+        Optional<UserEntity> byUserEmail = userRepository.findByUserEmail(userEmail);
+        if (byUserEmail.isPresent()) {
+            UserEntity userEntity = byUserEmail.get();
+            userEntity.setUserPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(userEntity);
+        }
+    }
+
+    public boolean checkPassword(String userEmail, String inputPassword) {
+        Optional<UserEntity> byUserEmail = userRepository.findByUserEmail(userEmail);
+        if (byUserEmail.isPresent()) {
+            UserEntity userEntity = byUserEmail.get();
+            return passwordEncoder.matches(inputPassword, userEntity.getUserPassword());
+        }
+        return false;
+    }
+
+    public UserDto findByEmail(String userEmail) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByUserEmail(userEmail);
+        if (optionalUserEntity.isPresent()) {
+            return UserDto.toUserDto(optionalUserEntity.get());
+        } else {
+            return null;
         }
     }
 }

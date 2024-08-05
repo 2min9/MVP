@@ -17,7 +17,7 @@ public class TestResultEntity {
     private Integer idx;
 
     @Column
-    private String testNum;
+    private Integer testNum;
 
     @Column
     private String answer;
@@ -29,20 +29,11 @@ public class TestResultEntity {
     @Column
     private LocalDateTime createdTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "word_test_entity_idx")
     private WordTestEntity wordTestEntity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "word_idx")
     private WordEntity wordIdx;
-
-    public void setWordInfoIdx(Integer idx) {
-        if (idx == null) {
-            this.wordIdx = null;
-        } else {
-            this.wordIdx = new WordEntity();
-            this.wordIdx.setIdx(idx);
-        }
-    }
 }

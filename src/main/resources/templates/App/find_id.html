@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<form class="form" action="" method="post">
+<form class="form" action="/find_id" method="post">
     <p class="title">Find_ID </p>
 
     <label>
@@ -16,26 +16,35 @@
         <span>Name</span>
     </label>
 
-    <label style="display: flex; flex-direction: row;">
-        <input class="number" name="userPhone" type="tel" placeholder="" required>
+    <label>
+        <input class="input" name="userPhone" type="tel" placeholder="" required>
         <span>Phone</span>
-        <div class="btn">인증번호받기</div>
     </label>
 
-    <label style="display: flex; flex-direction: row;">
-        <input class="number" type="text" placeholder="">
-        <span>Certification Number</span>
-        <div class="btn2">등록</div>
-    </label>
     <button class="submit" type="submit">Find ID</button>
-    <button class="back">Back</button>
-    <p>결과 들어갈 곳</p>
+    <button onclick="location.href='/'" class="back">Back</button>
+    <p id="result"></p>
     <br/>
     <br/>
-    <a class="signin" href="#">Find pw</a>
-
-<!--    <p class="signin">사용자의 아이디는  <strong style="color: #8C5946;">oooo@naver.com</strong>  입니다.</p>-->
+    <a class="signin" href="/App/find_pw">Find pw</a>
 </form>
-</body>
 
+<script>
+    // JavaScript to update result after submission
+    const form = document.querySelector('form');
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.text();
+        document.getElementById('result').innerText = `사용자의 아이디는 ${result} 입니다.`;
+        if(result === "a") {
+            document.getElementById('result').innerText = `사용자 아이디를 찾을 수 없습니다.`;
+        }
+    };
+</script>
+</body>
 </html>

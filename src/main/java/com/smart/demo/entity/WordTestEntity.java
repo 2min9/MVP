@@ -21,11 +21,13 @@ public class WordTestEntity extends BaseEntity {
     @Column
     private Integer testPoint;
 
-    // 맞춘 문제 개수
-    @Setter
+    @Column
     private Integer solvedCount;
 
-    // 전체 문제 개수
+    @Column
+    private Integer language;
+
+    @Column
     private Integer questionCount;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

@@ -26,9 +26,15 @@
         <span>Phone</span>
     </label>
     <button class="submit" type="submit">Reset Password</button>
-    <button class="back">Back</button>
+    <button class="back" onclick="home()">Back</button>
     <a class="signin" href="/App/login">login</a>
 </form>
+
+<script>
+    function home() {
+        window.location.href = '/App/login';
+    }
+</script>
 </body>
 
 </html>

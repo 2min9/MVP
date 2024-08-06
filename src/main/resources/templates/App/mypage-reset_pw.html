@@ -12,6 +12,7 @@
 <form class="form" method="post" th:action="@{/reset_pw/{idx}(idx=${user.idx})}">
     <input type="hidden" name="idx" th:value="${user.idx}"> <!-- idx를 폼 데이터로 포함 -->
     <input type="hidden" name="userEmail" th:value="${user.userEmail}">
+    <p class="title">Reset_password</p>
     <h3 style="margin-top: -3%;">비밀번호를 재설정 할 수 있습니다.</h3>
 
     <label>
@@ -28,6 +29,7 @@
     <button class="back" type="button" onclick="window.history.back();">Back</button>
 </form>
 
+
 <script>
     function passConfirm() {
         var password = document.getElementById('password').value;
@@ -36,10 +38,10 @@
 
         if (password === passwordConfirm && password !== "") {
             confirmMsg.style.color = 'green';
-            confirmMsg.innerHTML = "Passwords match";
+            confirmMsg.innerHTML = "비밀번호 일치";
         } else {
             confirmMsg.style.color = 'red';
-            confirmMsg.innerHTML = "Passwords do not match";
+            confirmMsg.innerHTML = "비밀번호 불일치";
         }
     }
 
@@ -50,6 +52,7 @@
         passwordField.addEventListener('blur', passConfirm);
         passwordConfirmField.addEventListener('input', passConfirm);
     });
+
 </script>
 </body>
 

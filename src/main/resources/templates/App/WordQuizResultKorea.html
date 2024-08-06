@@ -290,7 +290,6 @@
             <!-- ***** Logo End ***** -->
         </nav>
     </div>
-
 </header>
 <!-- ***** Header Area End ***** -->
 
@@ -313,59 +312,18 @@
                 </div>
                 <!-- 문제 나오고 답 적는곳 -->
                 <div class="content">
-                    <p align="center" id="word-name" th:text="${selectedMeaning}"></p>
+                    <p align="center" id="word-name" th:text="${randomMeaning}"></p>
                     <form th:action="@{/checkAnswerKorea}" method="post">
-                    <div class="inp" th:if="${quizMode}">
+                        <div class="inp" th:if="${quizMode}">
                             <input type="hidden" name="wordIdx" th:value="${word.idx}" />
-                            <input type="hidden" name="wordTest.idx" th:value="${session.wordTestEntity.idx}" />
+                            <input type="hidden" name="wordTestEntityId" th:value="${session.wordTestEntity.idx}" />
                             <input type="text" class="input" maxlength="50" id="otpInput" name="userAnswer" required />
-                    </div>
+                        </div>
                         <button style="margin-top: 16px; position: relative; left: 32%;" type="submit">등록</button>
                     </form>
-                    <div th:if="${resultMessage}" class="result-message">
-                        <img src="../../img/O.png">
-                    </div>
-                    <p th:text="${resultMessage2}" class="result-message2"></p>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="btn-area" style="margin-bottom: -8%;">
-    <div style="display: flex; flex-direction: row; justify-content: space-evenly;" th:unless="${lastQuestion}">
-        <div class="col-lg-5 align-self-center">
-            <div class="section-heading">
-                <div class="main-button">
-                    <button type="submit" style="background: none; font-size: 1em; font-weight: 900; border: none; padding: 0; cursor: pointer;">
-                        <img src="../../assets/images/left-arrow.png" style="width: 30px; margin-bottom: 3px;">
-                    </button>
-                </div>
-            </div>
-        </div>
-        <form action="#" th:action="@{/App/Quiz/Next}" method="get">
-            <div class="col-lg-5 align-self-center">
-                <div class="section-heading">
-                    <div class="main-button">
-                        <button type="submit" style="background: none; font-size: 1em; font-weight: 900; border: none; padding: 0; cursor: pointer;">
-                            <img src="../../assets/images/right-arrow.png" alt="" style="width: 30px; margin-bottom: 3px;">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div th:if="${lastQuestion}">
-        <form action="#" th:action="@{/App/Quiz/endTest}" method="post">
-            <div class="col-lg-5 align-self-center">
-                <div class="section-heading">
-                    <div class="main-button">
-                        <button type="submit" style=" background: none; font-size: 1em; font-weight: 900; border: none; padding: 0; cursor: pointer;">
-                            <img src="../../assets/images/right-arrow.png" alt="" style="width: 30px; margin-bottom: 3px;">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
     </div>
 </div>
 테스트 : <span th:text="${word.wordName}"></span>
@@ -397,14 +355,20 @@
         </svg>
     </div>
 </div>
-
-
-
 <!-- 모달 -->
 <div id="myModal" class="modal">
     <div class="modal-content">
-        <p>다음문제로</p>
-        <button class="close-button" id="closeButton">확인</button>
+        <span id="closeButton" class="close">&times;</span>
+        <p>시험 시간이 종료되었습니다.</p>
+        <button id="exitButton" class="exit">시험 목록으로 돌아가기</button>
+    </div>
+</div>
+<!-- 모달이 닫히지 않게 설정하는 모달 -->
+<div id="exitModal" class="modal">
+    <div class="modal-content">
+        <p>정말로 시험을 종료하시겠습니까?</p>
+        <button id="confirmExit">확인</button>
+        <button id="cancelExit">취소</button>
     </div>
 </div>
 <script th:inline="javascript">
@@ -418,12 +382,15 @@
     const timerElement = document.getElementById('timer');
     const modal = document.getElementById('myModal');
     const closeButton = document.getElementById('closeButton');
+    const exitmodal = document.getElementById('exitModal');
+    const exitButton = document.getElementById('exitButton');
+    const confirmExit = document.getElementById('confirmExit');
+    const cancelExit = document.getElementById('cancelExit');
 
     function updateTimer() {
         const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
-        timerElement.textContent = `${seconds.toString().padStart(2, '0')}`;
-
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
         if (timeRemaining > 0) {
             timeRemaining--;
@@ -438,9 +405,23 @@
         window.location.href = '/App/Quiz/Next';
     }
 
+    exitButton.onclick = function () {
+        modal.style.display = "none";
+        window.location.href = '/App/testList';
+    }
+
+    confirmExit.onclick = function () {
+        exitmodal.style.display = "none";
+        window.location.href = '/App/testList';
+    }
+
+    cancelExit.onclick = function () {
+        exitmodal.style.display = "none";
+    }
+
     // 바깥 클릭해도 모달 닫히지 않게 설정
     window.onclick = function (event) {
-        if (event.target == modal) {
+        if (event.target == modal || event.target == exitmodal) {
             event.stopPropagation();
         }
     }
@@ -450,9 +431,12 @@
         event.stopPropagation();
     }
 
+    exitmodal.querySelector('.modal-content').onclick = function (event) {
+        event.stopPropagation();
+    }
+
     updateTimer();
 </script>
-
 <!-- TTS script -->
 <script>
     $(function () {

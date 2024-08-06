@@ -50,10 +50,15 @@ public class UserEntity extends BaseEntity {
         userEntity.setUserEmail(userDto.getUserEmail());
         userEntity.setUserPassword(userDto.getUserPassword());
         userEntity.setUserBirth(userDto.getUserBirth());
-        userEntity.setUserPhone(userDto.getUserPhone());
+
+        // 전화번호에서 숫자만 추출
+        String cleanedPhoneNumber = userDto.getUserPhone().replaceAll("[^0-9]", "");
+        userEntity.setUserPhone(cleanedPhoneNumber);
+
         userEntity.setUserGender(userDto.getUserGender());
         userEntity.setUserAble(userDto.getUserAble());
         userEntity.setUserUuid(UUID.randomUUID().toString());
         return userEntity;
     }
+
 }

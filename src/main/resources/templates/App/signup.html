@@ -98,19 +98,19 @@
     <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
 
     <label style="display: flex; flex-direction: row;">
-        <input class="number" name="userPhone" id="phone" type="tel" placeholder="" required>
+        <input class="number" name="userPhone" id="phone" type="tel" placeholder="" maxlength="11" required>
         <span>Phone</span>
         <div class="btn">verifiy</div>
     </label>
 
     <label style="display: flex; flex-direction: row;">
-        <input class="number" type="text" placeholder="">
+        <input class="number" type="text" placeholder="" >
         <span>Certification Number</span>
         <div class="btn2">registration</div>
     </label>
 
     <button class="submit" type="submit">Submit</button>
-    <button class="back">Back</button>
+    <button class="back" onclick="home()">Back</button>
     <p class="signin">Already have an account ? <a href="#">Signin</a> </p>
 </form>
 
@@ -124,6 +124,10 @@
 </div>
 
 <script>
+    function home() {
+        window.location.href = '/App/login';
+    }
+
     function showModal() {
         document.getElementById("signupModal").style.display = "block";
     }

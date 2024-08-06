@@ -210,14 +210,17 @@ public class QuizController {
             String selectedMeaning = meanings[new Random().nextInt(meanings.length)];
 
             model.addAttribute("word", randomWord);
-            model.addAttribute("selectedMeaning", selectedMeaning); // 선택된 의미 추가
+            model.addAttribute("randomMeaning", selectedMeaning); // 선택된 의미 추가
             model.addAttribute("quizMode", true);
 
-            solvedWords.add(randomWord.getIdx());
-            session.setAttribute("solvedWords", solvedWords);
-
+            if (!solvedWords.contains(randomWord.getIdx())) {
+                solvedWords.add(randomWord.getIdx());
+                session.setAttribute("solvedWords", solvedWords);
+            }
             int solvedCount = (int) session.getAttribute("solvedCount");
-            solvedCount++;
+            if(solvedCount == 0) {
+                solvedCount = 1;
+            }
             session.setAttribute("solvedCount", solvedCount);
 
             model.addAttribute("solvedCount", solvedCount);
@@ -234,6 +237,7 @@ public class QuizController {
         }
     }
 
+
     @Transactional
     @PostMapping("/checkAnswer")
     public String checkAnswer(@RequestParam Integer wordIdx, @RequestParam(required = false) String userAnswer,
@@ -249,10 +253,13 @@ public class QuizController {
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
         Integer solvedCount = (Integer) session.getAttribute("solvedCount");
         List<Integer> solvedWords = (List<Integer>) session.getAttribute("solvedWords");
+        String examMode = (String) session.getAttribute("examMode");
 
         if (solvedCount == null) {
             solvedCount = 1;
         }
+
+        Integer testNum = solvedCount;
 
         // 세션에서 WordTestEntity를 가져옵니다
         WordTestEntity wordTestEntity = (WordTestEntity) session.getAttribute("wordTestEntity");
@@ -282,6 +289,20 @@ public class QuizController {
             if (isCorrect) {
                 ox = "O";
                 model.addAttribute("resultMessage", "정답입니다!");
+
+                // 정답인 경우 점수를 증가시킵니다
+                Integer testPoint = wordTestEntity.getTestPoint();
+                if (testPoint == null) {
+                    testPoint = 0;
+                }
+
+                // 문제당 점수 계산 (예: 100점 만점)
+                Integer totalQuestions = wordTestEntity.getQuestionCount();
+                int pointsPerQuestion = 100 / totalQuestions; // 각 문제당 점수
+                testPoint += pointsPerQuestion; // 정답 점수 증가
+
+                wordTestEntity.setTestPoint(testPoint);
+                wordTestRepository.save(wordTestEntity);
             } else if (cleanedUserAnswer.trim().isEmpty()) {
                 ox = "X"; // 답변이 비어 있는 경우 "X"로 처리
                 model.addAttribute("resultMessage2", "정답을 입력하지 않았습니다.");
@@ -338,6 +359,7 @@ public class QuizController {
             if (isLastQuestion) {
                 // 마지막 문제를 푼 경우
                 model.addAttribute("resultMessage", "시험이 종료되었습니다.");
+                session.setAttribute("finalScore", wordTestEntity.getTestPoint()); // 최종 점수를 세션에 저장
                 return "redirect:/App/testList"; // 결과 페이지로 이동
             } else {
                 // 다음 문제를 찾습니다.
@@ -346,11 +368,9 @@ public class QuizController {
                 // 문제가 없을 경우, 리스트 페이지로 리다이렉트합니다.
                 if (randomWordDto != null) {
                     // 단어의 의미를 랜덤으로 선택
-                    String selectedMeaning = meanings[new Random().nextInt(meanings.length)];
 
                     // 모델에 단어와 선택된 의미를 추가합니다.
                     model.addAttribute("word", randomWordDto);
-                    model.addAttribute("selectedMeaning", selectedMeaning);
                     model.addAttribute("quizMode", true);
 
                     // 마지막 문제 여부를 모델에 추가
@@ -373,86 +393,149 @@ public class QuizController {
     @PostMapping("/checkAnswerKorea")
     public String checkAnswerKorea(@RequestParam Integer wordIdx, @RequestParam(required = false) String userAnswer,
                                    Model model, HttpSession session) {
+        // 로그 출력
+        System.out.println("Received request for wordIdx: " + wordIdx);
+
+        // 단어 정보를 가져옵니다
         WordDto wordDto = wordService.findById(wordIdx);
+        System.out.println("WordDto: " + wordDto);
+
+        if (wordDto == null) {
+            model.addAttribute("resultMessage", "단어를 찾을 수 없습니다.");
+            return "App/testList"; // 오류 페이지로 이동
+        }
+
+        // 세션에서 필요한 데이터 가져오기
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
         Integer solvedCount = (Integer) session.getAttribute("solvedCount");
+        List<Integer> solvedWords = (List<Integer>) session.getAttribute("solvedWords");
+        String examMode = (String) session.getAttribute("examMode");
 
         if (solvedCount == null) {
             solvedCount = 1;
-        } else {
-            // solvedCount는 증가시키지 않음
         }
 
-        Integer testNum = solvedCount;
-
+        // 세션에서 WordTestEntity 가져오기
         WordTestEntity wordTestEntity = (WordTestEntity) session.getAttribute("wordTestEntity");
         if (wordTestEntity == null) {
-            return "error"; // 적절한 오류 페이지로 리다이렉트 또는 리턴
+            wordTestEntity = new WordTestEntity();
+            wordTestEntity = wordTestRepository.save(wordTestEntity);
+            session.setAttribute("wordTestEntity", wordTestEntity);
+        } else {
+            wordTestEntity = wordTestRepository.findById(wordTestEntity.getIdx()).orElse(wordTestEntity);
         }
+
+        // 사용자 답변 정리
+        String cleanedUserAnswer = (userAnswer != null && !userAnswer.trim().isEmpty())
+                ? userAnswer.replaceAll("[^a-zA-Z]", "") // 영어 문자만 허용
+                : "X";
 
         String ox = "X";
-        String cleanedUserAnswer = (userAnswer != null && !userAnswer.isEmpty()) ? userAnswer.replaceAll("[^a-zA-Z0-9가-힣]", "") : " ";
 
-        if (wordDto != null) {
-            // 단어의 의미와 사용자가 입력한 정답 비교
-            String[] names = wordDto.getWordName().split(", ");
-            boolean isCorrect = Arrays.stream(names)
-                    .map(meaning -> meaning.replaceAll("[^a-zA-Z0-9가-힣]", "")) // 데이터베이스 정답 정리
-                    .anyMatch(naming -> naming.equalsIgnoreCase(cleanedUserAnswer));
+        // 정답 검증
+        String[] names = wordDto.getWordName().split(", ");
+        boolean isCorrect = Arrays.stream(names)
+                .map(name -> name.replaceAll("[^a-zA-Z]", "")) // 데이터베이스 정답 정리
+                .anyMatch(name -> name.equalsIgnoreCase(cleanedUserAnswer));
 
-            if (isCorrect) {
-                ox = "O";
-                model.addAttribute("resultMessage", "정답입니다!");
-            } else {
-                model.addAttribute("resultMessage2", "틀렸습니다. 정답은 " + wordDto.getWordName() + "입니다.");
+        if (isCorrect) {
+            ox = "O";
+            model.addAttribute("resultMessage", "정답입니다!");
+
+            // 정답인 경우 점수 증가
+            Integer testPoint = wordTestEntity.getTestPoint();
+            if (testPoint == null) {
+                testPoint = 0;
             }
 
-            // TestResultEntity 생성 및 저장
-            TestResultEntity testResultEntity = saveTestResultAndWord(testNum, cleanedUserAnswer, ox, wordTestEntity, wordDto);
+            Integer totalQuestions = wordTestEntity.getQuestionCount();
+            int pointsPerQuestion = 100 / totalQuestions; // 각 문제당 점수
+            testPoint += pointsPerQuestion; // 정답 점수 증가
 
-            List<TestResultEntity> testResults = (List<TestResultEntity>) session.getAttribute("testResults");
-            if (testResults == null) {
-                testResults = new ArrayList<>();
-            }
-            testResults.add(testResultEntity);
-            session.setAttribute("testResults", testResults);
-
-            // WordTestEntity의 wordInfo 설정
-            WordEntity wordEntity = wordService.convertToEntity(wordDto);
-            wordTestEntity.setWordInfo(wordEntity);
+            wordTestEntity.setTestPoint(testPoint);
             wordTestRepository.save(wordTestEntity);
+        } else if (cleanedUserAnswer.trim().isEmpty()) {
+            ox = "X";
+            model.addAttribute("resultMessage2", "정답을 입력하지 않았습니다.");
         } else {
-            model.addAttribute("resultMessage", "단어를 찾을 수 없습니다.");
+            model.addAttribute("resultMessage2", "틀렸습니다. 정답은 " + wordDto.getWordName() + "입니다.");
         }
 
-        session.setAttribute("solvedCount", solvedCount);
-        session.setAttribute("wordList", wordList);
+        // TestResultEntity 생성 및 저장
+        TestResultEntity testResultEntity = saveTestResultAndWord(solvedCount, cleanedUserAnswer, ox, wordTestEntity, wordDto);
+        System.out.println("TestResultEntity created: " + testResultEntity);
 
-        model.addAttribute("word", wordDto);
-        model.addAttribute("quizMode", true);
-        model.addAttribute("solvedCount", solvedCount);
-        model.addAttribute("lastQuestion", solvedCount.equals(session.getAttribute("questionCount")));
+        // 세션에서 TestResultEntity 리스트를 가져오고 업데이트
+        List<TestResultEntity> testResults = (List<TestResultEntity>) session.getAttribute("testResults");
+        if (testResults == null) {
+            testResults = new ArrayList<>();
+        }
+        testResults.add(testResultEntity);
+        session.setAttribute("testResults", testResults);
 
-        return "App/WordQuizResultKorea"; // 결과 페이지로 이동
+        // 푼 문제 목록에 현재 문제를 추가
+        if (solvedWords == null) {
+            solvedWords = new ArrayList<>();
+        }
+        solvedWords.add(wordDto.getIdx());
+        session.setAttribute("solvedWords", solvedWords);
+
+        // solvedCount 업데이트
+        Integer totalQuestions = wordTestEntity.getQuestionCount();
+        if (totalQuestions == null) {
+            totalQuestions = wordList.size();
+            wordTestEntity.setQuestionCount(totalQuestions);
+            wordTestRepository.save(wordTestEntity);
+        }
+
+        boolean isLastQuestion = (solvedCount.equals(totalQuestions));
+
+        if (solvedCount < totalQuestions) {
+            solvedCount++;
+            session.setAttribute("solvedCount", solvedCount);
+        }
+
+        model.addAttribute("lastQuestion", isLastQuestion);
+
+        if (solvedCount == totalQuestions + 1) {
+            return "redirect:/App/testList";
+        }
+
+        if (isLastQuestion) {
+            model.addAttribute("resultMessage", "시험이 종료되었습니다.");
+            session.setAttribute("finalScore", wordTestEntity.getTestPoint()); // 최종 점수를 세션에 저장
+            return "redirect:/App/testList"; // 결과 페이지로 이동
+        } else {
+            // Redirect to randomQuiz endpoint with examMode parameter
+            return "redirect:/App/Quiz/Random?examMode=" + examMode;
+        }
     }
+
+
+
 
     /**
      * TestResultEntity를 저장하고 WordEntity의 관계를 설정하여 반환하는 메서드
      */
-    private TestResultEntity saveTestResultAndWord(Integer testNum, String userAnswer, String ox,
-                                                   WordTestEntity wordTestEntity, WordDto wordDto) {
+    @Transactional
+    public TestResultEntity saveTestResultAndWord(Integer testNum, String userAnswer, String ox,
+                                                  WordTestEntity wordTestEntity, WordDto wordDto) {
         System.out.println("Saving TestResultEntity with testNum: " + testNum + ", userAnswer: " + userAnswer + ", ox: " + ox);
 
+        // WordTestEntity를 병합하여 영속성 컨텍스트에 다시 연결
+        WordTestEntity managedWordTestEntity = wordTestRepository.save(wordTestEntity);
+        managedWordTestEntity.setTestPoint(wordTestEntity.getTestPoint());
+
         TestResultEntity testResultEntity = new TestResultEntity();
-        testResultEntity.setTestNum(testNum); // solvedCount를 testNum으로 사용
-        testResultEntity.setAnswer(userAnswer != null ? userAnswer : " "); // 답변이 null일 경우 공백 문자열로 처리
+        testResultEntity.setTestNum(testNum);
+        testResultEntity.setAnswer(userAnswer != null ? userAnswer : " ");
         testResultEntity.setOx(ox);
-        testResultEntity.setWordTestEntity(wordTestEntity); // wordTestEntity 설정
+        testResultEntity.setWordTestEntity(managedWordTestEntity); // 병합된 엔티티 사용
 
         // WordEntity와의 관계 설정
         if (wordDto != null) {
             WordEntity wordEntity = new WordEntity();
-            wordEntity.setIdx(wordDto.getIdx()); // 예시에서는 WordDto의 idx를 WordEntity의 idx로 설정한 것으로 가정
+            wordEntity.setIdx(wordDto.getIdx());
             testResultEntity.setWordIdx(wordEntity);
         }
 
@@ -462,18 +545,16 @@ public class QuizController {
         return savedEntity;
     }
 
-
-
-
-    // 문제를 설정하는 메서드 (예를 들어, 문제를 표시하는 페이지에서 호출될 수 있음)
     @GetMapping("/startTest")
     public String startTest(
+            @RequestParam("examMode") String examMode,
             @RequestParam Integer wordLevel,
             @RequestParam int questionCount,
             Model model,
             HttpSession session) {
 
         String userUuid = (String) session.getAttribute("userUuid");
+        session.setAttribute("examMode", examMode);
 
         // wordLevel과 questionCount를 기반으로 단어 리스트 가져오기
         List<WordDto> wordList = wordService.findByWordLevel(wordLevel);
@@ -502,6 +583,14 @@ public class QuizController {
         wordTestEntity.setTestPoint(0); // 초기 점수 0 설정
         wordTestEntity.setUserInfo(userEntity); // UserEntity 설정
         wordTestEntity.setQuestionCount(questionCount); // 전체 문제 수 설정
+
+        // examMode에 따라 language 설정
+        if ("korEng".equals(examMode)) {
+            wordTestEntity.setLanguage(0);
+        } else if ("engKor".equals(examMode)) {
+            wordTestEntity.setLanguage(1);
+        }
+
         wordTestEntity = wordTestRepository.save(wordTestEntity); // 저장된 엔티티로 업데이트
 
         // 첫 번째 문제를 설정 (이후 문제를 순차적으로 보여줄 수 있도록 설정)
@@ -528,14 +617,15 @@ public class QuizController {
         return "redirect:/App/Quiz/Random";
     }
 
+
     @GetMapping("/App/testList")
     public String testList(Model model,
-                            HttpSession session,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size) {
+                           HttpSession session,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "10") int size) {
         // 세션에서 사용자 UUID를 가져옵니다.
         String userUuid = (String) session.getAttribute("userUuid");
-
+        String examMode = (String) session.getAttribute("examMode");
         // Pageable 객체 생성
         Pageable pageable = PageRequest.of(page, size);
 
@@ -563,6 +653,7 @@ public class QuizController {
         }
 
         model.addAttribute("testPage", testPage);
+        model.addAttribute("examMode", examMode);
 
         return "App/testList";
     }
@@ -571,9 +662,16 @@ public class QuizController {
     // QuizController.java
     @GetMapping("/App/testDetail/{id}")
     @Transactional
-    public String detailTest(@PathVariable("id") Integer wordTestEntityId, Model model) {
+    public String detailTest(@PathVariable("id") Integer wordTestEntityId, Model model, HttpSession session) {
         try {
             List<TestResultEntity> results = wordTestService.getTestResultsByWordTestEntityId(wordTestEntityId);
+            String examMode = (String) session.getAttribute("examMode");
+
+            WordTestEntity wordTestEntity = wordTestRepository.findById(wordTestEntityId).orElse(null);
+            if (wordTestEntity == null) {
+                model.addAttribute("errorMessage", "테스트를 찾을 수 없습니다.");
+                return "error";
+            }
 
             for (TestResultEntity result : results) {
                 WordEntity wordInfo = result.getWordIdx(); // TestResultEntity의 wordInfo 가져오기
@@ -587,6 +685,11 @@ public class QuizController {
                 model.addAttribute("createdTime", createdTime);
             }
 
+            // 언어 정보 모델에 추가
+            int language = wordTestEntity.getLanguage();
+            model.addAttribute("language", language);
+
+            model.addAttribute("examMode", examMode);
             model.addAttribute("resultsWithWordInfo", results);
             return "App/testDetail";
         } catch (Exception e) {
@@ -595,4 +698,53 @@ public class QuizController {
             return "error";
         }
     }
+
+    @PostMapping("/App/goBack")
+    public String goBack(HttpSession session, Model model) {
+        List<Integer> solvedWords = (List<Integer>) session.getAttribute("solvedWords");
+        if (solvedWords == null || solvedWords.isEmpty()) {
+            model.addAttribute("resultMessage", "이전 문제를 찾을 수 없습니다.");
+            return "App/level_test";
+        }
+
+        Integer currentWordIdx = (Integer) session.getAttribute("currentWordIdx");
+        if (currentWordIdx == null) {
+            model.addAttribute("resultMessage", "이전 문제를 찾을 수 없습니다.");
+            return "App/level_test";
+        }
+
+        // 현재 문제 인덱스 찾기
+        int currentIndex = solvedWords.indexOf(currentWordIdx);
+
+        if (currentIndex > 0) {
+            Integer previousWordIdx = solvedWords.get(currentIndex - 1);
+            WordDto previousWordDto = wordService.findById(previousWordIdx);
+
+            model.addAttribute("word", previousWordDto);
+            model.addAttribute("quizMode", true);
+
+            // 이전 문제 인덱스를 세션에 저장
+            session.setAttribute("currentWordIdx", previousWordIdx);
+
+            return "App/WordQuizResult";
+        } else {
+            model.addAttribute("resultMessage", "이전 문제를 찾을 수 없습니다.");
+            return "App/level_test";
+        }
+    }
+
+    @GetMapping("/App/getCurrentWordIdx")
+    @ResponseBody
+    public Map<String, Integer> getCurrentWordIdx(HttpSession session) {
+        Integer currentWordIdx = (Integer) session.getAttribute("currentWordIdx");
+        if (currentWordIdx == null) {
+            currentWordIdx = -1; // 기본값 설정 (문제 없음)
+        }
+        Map<String, Integer> response = new HashMap<>();
+        response.put("currentWordIdx", currentWordIdx);
+        return response;
+    }
+
+
+
 }

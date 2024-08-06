@@ -190,7 +190,7 @@
         <span th:each="pageNum : ${#numbers.sequence(0, testPage.totalPages - 1)}">
                 <li class="page-item" th:classappend="${pageNum == testPage.number} ? 'active' : ''">
                     <a class="page-link" th:href="@{/App/testList(page=${pageNum}, size=${testPage.size})}"
-                       th:text="${pageNum + 1}"></a>
+                       th:if="${pageNum >= 0}" th:text="${pageNum + 1}"></a>
                 </li>
         </span>
 
@@ -207,7 +207,7 @@
         <div class="col-lg-5 align-self-center">
             <div class="section-heading">
                 <div class="main-button">
-                    <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;">
+                    <a th:href="@{/App/MyPage/{sessionIdx}(sessionIdx = ${session.idx})}" style="border: 1px solid; font-size: 1em; font-weight: 900;">
                         <img src="../../assets/images/back-arrow.png" style="width: 22px; margin-bottom: 3px;"> 뒤로
                     </a>
                 </div>

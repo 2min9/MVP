@@ -81,8 +81,9 @@
     </label>
 
     <label>
-        <input class="input" type="email" name="userEmail" placeholder="" required>
+        <input class="input" type="email" id="email" name="userEmail" onblur="emailCheck()" placeholder="" required>
         <span>Email</span>
+        <p id="email-check-result" style="display: flex; margin: 0; font-size: 0.7em; color: red;"></p>
     </label>
 
     <label>
@@ -98,20 +99,20 @@
     <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
 
     <label style="display: flex; flex-direction: row;">
-        <input class="number" name="userPhone" id="phone" type="tel" placeholder="" maxlength="11" required>
+        <input class="number" name="userPhone" id="phone" type="tel" placeholder="" minlength="11" maxlength="11" required>
         <span>Phone</span>
         <div class="btn">verifiy</div>
     </label>
 
     <label style="display: flex; flex-direction: row;">
-        <input class="number" type="text" placeholder="" >
+        <input class="number" type="text" placeholder="">
         <span>Certification Number</span>
         <div class="btn2">registration</div>
     </label>
 
     <button class="submit" type="submit">Submit</button>
-    <button class="back" onclick="home()">Back</button>
-    <p class="signin">Already have an account ? <a href="#">Signin</a> </p>
+    <button onclick="home()" class="back">Back</button>
+    <p class="signin">Already have an account ? <a onclick="home()">Signin</a> </p>
 </form>
 
 <!-- Modal Structure -->
@@ -123,7 +124,10 @@
     </div>
 </div>
 
+
+
 <script>
+
     function home() {
         window.location.href = '/App/login';
     }
@@ -161,6 +165,29 @@
                 } else {
                     checkResult.style.color = "red";
                     checkResult.innerHTML = "이미 사용 중인 닉네임입니다.";
+                }
+            },
+            error: function (err) {
+                console.log("Error:", err);
+            }
+        });
+    }
+
+    function emailCheck() {
+        var email = document.getElementById("email").value;
+        var checkResult = document.getElementById("email-check-result");
+
+        $.ajax({
+            type: "post",
+            url: "/user/email-check",
+            data: { userEmail: email },
+            success: function (res) {
+                if (res === "OK") {
+                    checkResult.style.color = "green";
+                    checkResult.innerHTML = "사용 가능한 이메일입니다.";
+                } else {
+                    checkResult.style.color = "red";
+                    checkResult.innerHTML = "이미 사용 중인 이메일입니다.";
                 }
             },
             error: function (err) {

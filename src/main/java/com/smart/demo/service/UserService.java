@@ -60,11 +60,7 @@ public class UserService {
 
     public UserDto findById(Integer idx) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(idx);
-        if (optionalUserEntity.isPresent()) {
-            return UserDto.toUserDto(optionalUserEntity.get());
-        } else {
-            return null;
-        }
+        return optionalUserEntity.map(UserDto::toUserDto).orElse(null);
     }
 
     @Transactional
@@ -110,6 +106,15 @@ public class UserService {
         }
     }
 
+    public String emailCheck(String email) {
+        Optional<UserEntity> byUserID = userRepository.findByUserEmail(email);
+        if (byUserID.isPresent()) {
+            return null;
+        } else {
+            return "OK";
+        }
+    }
+
     public void resetPassword(String userEmail, String newPassword) {
         Optional<UserEntity> byUserEmail = userRepository.findByUserEmail(userEmail);
         if (byUserEmail.isPresent()) {
@@ -127,5 +132,4 @@ public class UserService {
         }
         return false;
     }
-
 }

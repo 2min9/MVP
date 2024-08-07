@@ -72,7 +72,10 @@ public class UserController {
         UserEntity user = userRepository.findByUserEmail(userDto.getUserEmail())
                 .orElse(null);
 
-        if (user == null || (user != null && user.getUserAble() == 0)) {
+        UserEntity userPassword = userRepository.findByUserPassword(userDto.getUserPassword())
+                .orElse(null);
+
+        if (user == null || userPassword != null || user.getUserAble() == 0) {
             model.addAttribute("loginError", "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
             return "App/login"; // 로그인 실패 후 이동할 페이지
         }
@@ -90,20 +93,10 @@ public class UserController {
 
             return "App/main2"; // 로그인 성공 후 이동할 페이지
         } else {
-            PrintWriter out = response.getWriter();
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("text/html; charset=utf-8");
-            out.println("<script> alert('Invalid ID or password.');");
-            out.println("history.go(-1); </script>");
-            out.close();
+            model.addAttribute("loginError", "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
 
             return "App/login"; // 로그인 실패 후 이동할 페이지
         }
-    }
-
-    @GetMapping("/App/id_search")
-    public String id_search() {
-        return "App/id_search";
     }
 
     @GetMapping("/App/logout")
@@ -123,7 +116,7 @@ public class UserController {
     }
 
     @GetMapping("/App/MyPage/update/{idx}")
-    public String myPageUpdateForm(@PathVariable Integer idx, Model model, HttpSession session) {
+    public String myPageUpdateForm(@PathVariable Integer idx, Model model) {
         UserDto userDto = userService.findById(idx);
         model.addAttribute("user", userDto);
         return "App/MyPageUpdate";
@@ -161,12 +154,17 @@ public class UserController {
     @GetMapping("/user/delete/{idx}")
     public String delete(@PathVariable Integer idx) {
         userService.disableUser(idx);
-        return "redirect:/main1";
+        return "/App/main1";
     }
 
     @PostMapping("/user/nick-check")
     public @ResponseBody String nickCheck(@RequestParam("userNickname") String userNickname) {
         return userService.nickCheck(userNickname);
+    }
+
+    @PostMapping("/user/email-check")
+    public @ResponseBody String emailCheck(@RequestParam("userEmail") String userEmail) {
+        return userService.emailCheck(userEmail);
     }
 
     @GetMapping("/rankings")
@@ -256,7 +254,7 @@ public class UserController {
     }
 
     @GetMapping("/App/mypage-reset_pw/{idx}")
-    public String mypage_reset_pwForm(@PathVariable Integer idx, HttpSession session, Model model) {
+    public String mypage_reset_pwForm(@PathVariable Integer idx, Model model) {
         // 세션에서 userIdx를 가져와서 UserDto 객체를 조회
         UserDto userDto = userService.findById(idx);
         if (userDto != null) {

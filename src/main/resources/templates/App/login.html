@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<form class="form_main" action="/App/login" method="post">
+<form class="form_main" th:action="@{/App/login}" method="post">
     <p class="heading">Login</p>
     <div class="inputContainer">
         <svg viewBox="0 0 16 16" fill="#2e2e2e" height="16" width="16" xmlns="http://www.w3.org/2000/svg" class="inputIcon">
@@ -26,6 +26,11 @@
     </div>
 
     <button id="button" type="submit">Submit</button>
+
+    <div class="modal-body">
+        <span th:text="${loginError}" style="color: red; width: 114%"></span>
+    </div>
+
     <div class="signupContainer">
         <p style="margin-bottom: 1px;">Don't have any account?</p>
         <p>
@@ -39,6 +44,8 @@
         <a href="#" class="guest" id="guestLogin">Guest Login</a>
     </div>
 </form>
+
+
 
 <!-- 모달 창 -->
 <div id="guestModal" class="modal">

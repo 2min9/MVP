@@ -34,19 +34,17 @@
 
         /* Modal Background */
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
+            display: none; /* 기본적으로 모달을 숨깁니다 */
+            position: fixed; /* 화면에 고정된 위치 */
+            z-index: 1; /* 다른 요소들 위에 표시 */
             left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
+            width: 100%; /* 전체 화면 너비 */
+            height: 100%; /* 전체 화면 높이 */
+            overflow: auto; /* 내용이 길면 스크롤이 생김 */
+            background-color: rgba(0, 0, 0, 0.4); /* 반투명 검정 배경 */
         }
 
-        /* Modal Content */
         .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
@@ -56,14 +54,38 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            top: 35%;
-            left: 0%;
+            top: 33%;
+            left: 0;
+            border-radius: 20px;
         }
 
+        .close {
+            color: white;
+            float: right;
+            font-size: 24px;
+            padding: 8px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            background: green;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .close:focus {
+            color: black; /* 마우스를 올리면 검정색으로 변경 */
+            text-decoration: none; /* 텍스트 장식 제거 */
+        }
+
+        /* Custom Button */
         .modal-btn {
-            background-color: green;
-            border-radius: 10px;
-            font-size: 1em;
+            background-color: green; /* 버튼 배경색 */
+            border-radius: 10px; /* 둥근 테두리 */
+            font-size: 1em; /* 글자 크기 */
+            color: white; /* 글자색 흰색 */
+            padding: 10px 20px; /* 상하 여백 10px, 좌우 여백 20px */
+            border: none; /* 기본 테두리 제거 */
+            cursor: pointer; /* 클릭 가능한 커서 모양 */
+            margin-top: 20px; /* 모달 내용 상단 여백 */
         }
     </style>
 </head>
@@ -81,7 +103,8 @@
 
 <div class="center-wrap">
     <button class="button" onclick="location.href='/App/level_remember'"> 단어 외우기</button>
-    <button class="button2" onclick="location.href='/App/level_test'"> 시험 치기</button>
+    <button th:if="${session.idx != 0}" class="button2" onclick="location.href='/App/level_test'"> 단어 시험</button>
+    <button th:if="${session.idx == 0}" class="button2" onclick="showModal()">단어 시험</button>
 </div>
 
 <div class="center-wrap2">
@@ -91,7 +114,7 @@
 <!-- 로그아웃 모달 추가 -->
 <div id="logoutModal" class="modal">
     <div class="modal-content">
-        <p style="font-size: 1.7em">로그아웃 되었습니다.</p>
+        <p style="font-size: 1.7em; text-align: center;">로그아웃 되었습니다.</p>
         <button type="button" class="modal-btn" id="confirmLogout">확인</button>
     </div>
 </div>
@@ -126,6 +149,13 @@
     </div>
 </div>
 
+<!-- 모달 HTML -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <p>단어 시험은 <strong style="color: red">게스트 로그인</strong>에서 지원되지 않는 항목입니다.</p>
+        <button class="close" onclick="closeModal()">확인</button>
+    </div>
+</div>
 
 <!-- 자바스크립트 수정 -->
 <script>
@@ -140,18 +170,8 @@
         });
 
         confirmLogoutButton.addEventListener('click', function () {
-            window.location.href = '/App/login'; // 로그아웃 URL로 이동
+            window.location.href = '/App/logout'; // 로그아웃 URL로 이동
         });
-
-        // 모달 외부 클릭 시 모달 닫기 기능 제거
-        // 아래 코드를 주석 처리하거나 제거하여 모달 외부 클릭 시 닫히지 않도록 함
-        /*
-        window.addEventListener('click', function (e) {
-            if (e.target == logoutModal) {
-                logoutModal.style.display = 'none';
-            }
-        });
-        */
     });
 </script>
 
@@ -171,6 +191,24 @@
 
     function goToMyPage() {
         window.location.href = '/App/MyPage/' + sessionIdx;
+    }
+</script>
+<script>
+    // 모달을 보여주는 함수
+    function showModal() {
+        document.getElementById('myModal').style.display = 'block';
+    }
+
+    // 모달을 닫는 함수
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    // 모달 창 외부를 클릭하면 모달을 닫는 기능 추가
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('myModal')) {
+            closeModal();
+        }
     }
 </script>
 </body>

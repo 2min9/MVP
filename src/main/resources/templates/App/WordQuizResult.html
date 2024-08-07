@@ -359,6 +359,7 @@
         </svg>
     </div>
 </div>
+
 <!-- 모달 -->
 <div id="myModal" class="modal">
     <div class="modal-content">
@@ -448,8 +449,8 @@
         $('#btn-read').click(function () {
             var wordName = $('#word-name').text().trim();
             speak(wordName, {
-                rate: 1,
-                pitch: 1.2,
+                rate: 0.8,
+                pitch: 0.8,
                 lang: 'en-US'
             });
         });

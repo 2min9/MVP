@@ -91,7 +91,7 @@ public class UserController {
     @GetMapping("/App/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "App/main2";
+        return "App/main1";
     }
 
     @GetMapping("/App/MyPage/{idx}")

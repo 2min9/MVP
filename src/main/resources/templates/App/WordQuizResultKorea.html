@@ -363,6 +363,7 @@
         <button id="exitButton" class="exit">시험 목록으로 돌아가기</button>
     </div>
 </div>
+
 <!-- 모달이 닫히지 않게 설정하는 모달 -->
 <div id="exitModal" class="modal">
     <div class="modal-content">
@@ -443,9 +444,9 @@
         $('#btn-read').click(function () {
             var wordName = $('#word-name').text().trim();
             speak(wordName, {
-                rate: 1,
-                pitch: 1.2,
-                lang: 'en-US'
+                rate: 1.4,
+                pitch: 1.5,
+                lang: 'ko-KR'
             });
         });
     });

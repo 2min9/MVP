@@ -48,10 +48,11 @@
         </div>
         <h2>Guest Login</h2>
         <p><strong class="font-green">게스트 로그인</strong> 하게되면 <br>시험기록이 <strong class="font-red">저장되지 않고</strong> <br>랭킹에 <strong class="font-red">반영되지 않습니다</strong>.</p>
-        <div class="modal-buttons">
-            <button class="confirm-btn" id="confirmBtn">게스트 로그인</button>
-            <button class="cancel-btn" id="cancelBtn">취소</button>
-        </div>
+        <form action="/auth/guest-login" method="post">
+            <div class="modal-buttons">
+                <button class="confirm-btn" id="confirmBtn">게스트 로그인</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -61,17 +62,12 @@
     var btn = document.getElementById("guestLogin");
     var span = document.getElementById("closeModal");
     var confirmBtn = document.getElementById("confirmBtn");
-    var cancelBtn = document.getElementById("cancelBtn");
 
     btn.onclick = function () {
         modal.style.display = "flex";
     }
 
     span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    cancelBtn.onclick = function () {
         modal.style.display = "none";
     }
 

@@ -98,18 +98,6 @@ public class WordService {
     }
 
 
-
-    public WordEntity convertToEntity(WordDto wordDto) {
-        WordEntity wordEntity = new WordEntity();
-        wordEntity.setWordName(wordDto.getWordName());
-        wordEntity.setWordMean(wordDto.getWordMean());
-        wordEntity.setWordLevel(wordDto.getWordLevel());
-        wordEntity.setWordDetail(wordEntity.getWordDetail());
-        wordEntity.setWordAble(wordDto.getWordAble());
-        return wordEntity;
-    }
-
-
     public WordEntity findWordEntityById(Integer idx) {
         WordEntity wordEntity = wordRepository.findById(idx)
                 .orElseThrow(() -> new RuntimeException("WordEntity not found with id " + idx));

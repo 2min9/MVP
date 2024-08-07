@@ -1,11 +1,9 @@
 package com.smart.demo.dto;
 
 import com.smart.demo.entity.UserEntity;
-import jakarta.persistence.Convert;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import jakarta.websocket.OnMessage;
 import lombok.*;
 
 import java.time.LocalDateTime;

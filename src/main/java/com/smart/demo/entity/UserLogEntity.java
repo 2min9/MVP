@@ -19,9 +19,4 @@ public class UserLogEntity {
     @Column
     private String login_agent;
 
-//    @Column
-//    public Date login_in_time;
-//
-//    @Column
-//    public Date login_out_time;
 }

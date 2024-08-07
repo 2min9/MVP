@@ -8,8 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,8 +42,4 @@ public class AuthController {
         return new RedirectView("/main2"); // 로그인 후 홈 페이지로 리다이렉션
     }
 
-    private String generateSessionIdx() {
-        // 세션 인덱스 생성 로직 (예: UUID 사용)
-        return java.util.UUID.randomUUID().toString();
-    }
 }

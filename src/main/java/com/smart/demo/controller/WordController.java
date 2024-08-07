@@ -42,14 +42,6 @@ public class WordController {
         return "redirect:/Admin/Word";
     }
 
-//    @GetMapping("/Admin/Word/{id}")
-//    public String findById(@PathVariable Long words_idx, Model model) {
-//        WordDto wordDto = wordService.findById(words_idx);
-//        model.addAttribute("word", wordDto);
-//
-//        return "/Admin/Word_detail";
-//    } // 단어 상세보기
-
     @GetMapping("/Admin/update/{idx}")
     public String updateForm(@PathVariable Integer idx, Model model) {
         WordDto wordDto = wordService.findById(idx);

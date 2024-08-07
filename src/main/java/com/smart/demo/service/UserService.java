@@ -2,9 +2,7 @@ package com.smart.demo.service;
 
 import com.smart.demo.dto.UserDto;
 import com.smart.demo.entity.UserEntity;
-import com.smart.demo.entity.WordTestEntity;
 import com.smart.demo.repository.UserRepository;
-import com.smart.demo.repository.WordTestRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -63,15 +60,6 @@ public class UserService {
 
     public UserDto findById(Integer idx) {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(idx);
-        if (optionalUserEntity.isPresent()) {
-            return UserDto.toUserDto(optionalUserEntity.get());
-        } else {
-            return null;
-        }
-    }
-
-    public UserDto updateForm(String myEmail) {
-        Optional<UserEntity> optionalUserEntity = userRepository.findByUserEmail(myEmail);
         if (optionalUserEntity.isPresent()) {
             return UserDto.toUserDto(optionalUserEntity.get());
         } else {
@@ -140,12 +128,4 @@ public class UserService {
         return false;
     }
 
-    public UserDto findByEmail(String userEmail) {
-        Optional<UserEntity> optionalUserEntity = userRepository.findByUserEmail(userEmail);
-        if (optionalUserEntity.isPresent()) {
-            return UserDto.toUserDto(optionalUserEntity.get());
-        } else {
-            return null;
-        }
-    }
 }

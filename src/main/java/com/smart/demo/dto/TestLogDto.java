@@ -1,6 +1,5 @@
 package com.smart.demo.dto;
 
-
 import lombok.*;
 
 @Getter

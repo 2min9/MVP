@@ -2,7 +2,6 @@ package com.smart.demo.controller;
 
 import com.smart.demo.dto.UserDto;
 import com.smart.demo.dto.WordDto;
-import com.smart.demo.dto.WordTestDto;
 import com.smart.demo.entity.TestResultEntity;
 import com.smart.demo.entity.UserEntity;
 import com.smart.demo.entity.WordEntity;
@@ -15,13 +14,10 @@ import com.smart.demo.service.UserService;
 import com.smart.demo.service.WordService;
 import com.smart.demo.service.WordTestService;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -57,8 +52,6 @@ public class QuizController {
     @Autowired
     private UserRepository userRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     public QuizController(WordService wordService, TestResultRepository testResultRepository, WordTestService wordTestService) {

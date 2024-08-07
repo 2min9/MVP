@@ -2,7 +2,6 @@ package com.smart.demo.dto;
 
 import com.smart.demo.entity.UserEntity;
 import com.smart.demo.entity.WordEntity;
-import com.smart.demo.entity.WordTestEntity;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +24,6 @@ public class WordTestDto {
     private UserEntity userInfo; // UserEntity 참조
     private List<TestResultDto> results;
 
-    public static WordTestDto toWordTestDto(WordTestEntity wordTestEntity) {
-        WordTestDto wordTestDto = new WordTestDto();
-        wordTestDto.setIdx(wordTestEntity.getIdx());
-        wordTestDto.setTestPoint(wordTestEntity.getTestPoint());
-        wordTestDto.setCreatedTime(wordTestEntity.getCreatedTime());
-        wordTestDto.setUpdatedTime(wordTestEntity.getUpdatedTime());
-        return wordTestDto;
-    }
 
     @Getter
     @Setter

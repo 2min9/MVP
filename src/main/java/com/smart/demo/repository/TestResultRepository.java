@@ -1,7 +1,6 @@
 package com.smart.demo.repository;
 
 import com.smart.demo.entity.TestResultEntity;
-import com.smart.demo.entity.WordEntity;
 import com.smart.demo.entity.WordTestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

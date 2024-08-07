@@ -1,6 +1,5 @@
 package com.smart.demo.entity;
 
-import com.smart.demo.dto.AdminDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,14 +25,4 @@ public class AdminEntity {
     @Column
     private char admin_rank;
 
-
-    public static AdminEntity toAdminEntity(AdminDto adminDto) {
-        AdminEntity adminEntity = new AdminEntity();
-        adminEntity.setAdmin_name(adminDto.getAdmin_name());
-        adminEntity.setAdmin_email(adminDto.getAdmin_email());
-        adminEntity.setAdmin_password(adminDto.getAdmin_password());
-        adminEntity.setAdmin_rank(adminDto.getRank());
-
-        return adminEntity;
-    }
 }

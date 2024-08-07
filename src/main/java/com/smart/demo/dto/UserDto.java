@@ -40,8 +40,10 @@ public class UserDto {
     @NotEmpty(message = "성별은 필수 항목 입니다.")
     private char userGender;
 
-    private char userAble;
+    private Integer userAble;
+
     private String userUuid;
+
     private LocalDateTime created_time;
 
     public static UserDto toUserDto(UserEntity userEntity) {

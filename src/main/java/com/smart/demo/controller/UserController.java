@@ -1,10 +1,12 @@
 package com.smart.demo.controller;
 
 import com.smart.demo.dto.UserDto;
+import com.smart.demo.entity.LoginLogEntity;
 import com.smart.demo.entity.UserEntity;
 import com.smart.demo.entity.WordTestEntity;
 import com.smart.demo.repository.UserRepository;
 import com.smart.demo.repository.WordTestRepository;
+import com.smart.demo.service.LoginLogService;
 import com.smart.demo.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +28,9 @@ public class UserController {
 
     private final UserService userService;
     private final WordTestRepository wordTestRepository;
+
+    @Autowired
+    private LoginLogService loginLogService;
 
     @Autowired
     private UserRepository userRepository;
@@ -61,15 +66,29 @@ public class UserController {
         return "App/login";
     }
 
-    @PostMapping("/App/login")
-    public String processLogin(@ModelAttribute UserDto userDto, HttpSession session, HttpServletResponse response) throws IOException {
+    @PostMapping("App/login")
+    public String processLogin(@ModelAttribute UserDto userDto, HttpSession session, HttpServletResponse response, Model model) throws IOException {
         UserDto userResult = userService.login(userDto, session);
 
+        UserEntity user = userRepository.findByUserEmail(userDto.getUserEmail())
+                .orElse(null);
+
+        if (user == null || (user != null && user.getUserAble() == 0)) {
+            model.addAttribute("loginError", "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.");
+            return "App/login"; // 로그인 실패 후 이동할 페이지
+        }
+
         if (userResult != null) {
-            session.setAttribute("nickname", userResult.getUserNickname()); // 여기에 추가
+            session.setAttribute("nickname", userResult.getUserNickname());
             session.setAttribute("email", userResult.getUserEmail());
             session.setAttribute("idx", userResult.getIdx());
-            session.setAttribute("userUuid", userResult.getUserUuid()); // userUuid 추가
+            session.setAttribute("userUuid", userResult.getUserUuid());
+            session.setAttribute("userAble", user.getUserAble()); // userAble 값을 세션에 저장
+
+            // 로그인 로그 기록
+            LoginLogEntity loginLog = loginLogService.logLogin(userResult.getIdx());
+            session.setAttribute("loginLogId", loginLog.getIdx()); // 로그인 로그 ID를 세션에 저장
+
             return "App/main2"; // 로그인 성공 후 이동할 페이지
         } else {
             PrintWriter out = response.getWriter();
@@ -90,6 +109,7 @@ public class UserController {
 
     @GetMapping("/App/logout")
     public String logout(HttpSession session) {
+        loginLogService.logLogout(session);
         session.invalidate();
         return "App/main1";
     }
@@ -104,7 +124,7 @@ public class UserController {
     }
 
     @GetMapping("/App/MyPage/update/{idx}")
-    public String myPageUpdateForm(@PathVariable Integer idx, Model model) {
+    public String myPageUpdateForm(@PathVariable Integer idx, Model model, HttpSession session) {
         UserDto userDto = userService.findById(idx);
         model.addAttribute("user", userDto);
         return "App/MyPageUpdate";
@@ -141,8 +161,8 @@ public class UserController {
 
     @GetMapping("/user/delete/{idx}")
     public String delete(@PathVariable Integer idx) {
-        userService.deleteById(idx);
-        return "redirect:/User";
+        userService.disableUser(idx);
+        return "redirect:/main1";
     }
 
     @PostMapping("/user/nick-check")
@@ -154,6 +174,12 @@ public class UserController {
     public String showRankings(Model model, HttpSession session) {
         // WordTestEntity 리스트 가져오기
         List<WordTestEntity> rankings = wordTestRepository.findAll();
+
+        // 세션에서 userAble 값을 가져오기
+        Integer userAble = (Integer) session.getAttribute("userAble");
+        model.addAttribute("userAble", userAble);
+
+        System.out.println("userAble = " + userAble);
 
         String nickname = (String) session.getAttribute("nickname");
         model.addAttribute("nickname", nickname);

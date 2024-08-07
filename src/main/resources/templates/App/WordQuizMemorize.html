@@ -250,7 +250,13 @@
             /* 1초 동안 애니메이션 실행 */
         }
 
-        .DetailOn {}
+        .on {
+            text-align: center;
+            background: beige;
+            border-radius: 20px;
+            border: 1px solid;
+            padding: 20px
+        }
     </style>
 </head>
 
@@ -305,7 +311,6 @@
         </div>
     </div>
 </div>
-</div>
 
 <div class="btn-area" style="margin-bottom: -8%;">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
@@ -337,6 +342,12 @@
          class="O" id="resultImageX" alt="Test Image">
 </div>
 
+<!-- word Detail 나오는 곳 -->
+<div th:if="${resultMessage2 != null || resultMessage != null}" style="width: 90%; position: relative; left: 5%">
+    <div th:classappend="${resultMessage2} != 'null' ? 'on'">
+        <span th:text="${word.wordDetail}"></span>
+    </div>
+</div>
 
 <!-- under bar -->
 <div id="app">
@@ -367,11 +378,7 @@
     </div>
 </div>
 
-<div th:if="${resultMessage2 != null}">
-    <div th:classappend="${resultMessage2} != 'null' ? 'on'">
-        <span th:text="${word.wordDetail}"></span>
-    </div>
-</div>
+
 
 <!-- 1초뒤에 이미지 사라지게 하기 -->
 <script>

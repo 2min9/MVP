@@ -97,11 +97,19 @@ public class UserService {
         return UserDto.toUserDto(existingUserEntity);
     }
 
+    // 사용자 삭제 대신 userAble을 0으로 설정
+    @Transactional
+    public void disableUser(Integer idx) {
+        UserEntity user = userRepository.findById(idx)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-
-    public void deleteById(Integer idx) {
-        userRepository.deleteById(idx);
+        user.setUserAble(0);
+        userRepository.save(user);
     }
+
+//    public void deleteById(Integer idx) {
+//        userRepository.deleteById(idx);
+//    }
 
     public String nickCheck(String nickname) {
         Optional<UserEntity> byUserID = userRepository.findByUserNickname(nickname);

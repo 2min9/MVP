@@ -250,7 +250,13 @@
             /* 1초 동안 애니메이션 실행 */
         }
 
-        .DetailOn {}
+        .on {
+            text-align: center;
+            background: beige;
+            border-radius: 20px;
+            border: 1px solid;
+            padding: 20px
+        }
     </style>
 </head>
 
@@ -367,9 +373,9 @@
     </div>
 </div>
 
-<div th:if="${resultMessage2 != null}">
+<div th:if="${resultMessage2 != null || resultMessage != null}" style="width: 90%; position: relative; left: 5%">
     <div th:classappend="${resultMessage2} != 'null' ? 'on'">
-        <span th:text="${word.wordDetail}"></span>
+        <span th:text="${word.wordName}"></span>
     </div>
 </div>
 
@@ -401,9 +407,9 @@
         $('#btn-read').click(function () {
             var wordName = $('#word-name').text().trim();
             speak(wordName, {
-                rate: 1,
-                pitch: 1.2,
-                lang: 'en-US'
+                rate: 1.4,
+                pitch: 1.5,
+                lang: 'ko-KR'
             });
         });
     });

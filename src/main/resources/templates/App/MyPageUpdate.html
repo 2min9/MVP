@@ -328,7 +328,7 @@
                                 </label>
 
                                 <label style="display: flex; flex-direction: row;">
-                                    <input class="number2" th:value="${user.userPhone}" maxlength="11" name="userPhone" type="text" placeholder="" required>
+                                    <input class="number2" th:value="${user.userPhone}" name="userPhone" type="text" placeholder="" minlength="11" maxlength="11" required>
                                     <span>전화번호 수정</span>
                                 </label>
 
@@ -372,7 +372,7 @@
     <div class="col-lg-5 align-self-center">
         <div class="section-heading" style="margin-bottom: 15%;">
             <div class="main-button">
-                <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
+                <a th:href="@{'/user/delete/' + ${session.idx}}" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
                         th:src="@{/assets/images/trash-can.png}" style="width: 25px; margin-bottom: 5px;">회원탈퇴</a>
             </div>
         </div>
@@ -430,7 +430,7 @@
         });
 
         confirmLogoutButton.addEventListener('click', function () {
-            window.location.href = '/App/login'; // 로그아웃 URL로 이동
+            window.location.href = '/App/logout'; // 로그아웃 URL로 이동
         });
 
         // 모달 외부 클릭 시 모달 닫기 기능 제거

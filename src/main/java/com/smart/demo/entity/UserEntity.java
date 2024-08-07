@@ -38,7 +38,7 @@ public class UserEntity extends BaseEntity {
     private char userGender;
 
     @Column
-    private char userAble;
+    private Integer userAble = 1;
 
     @Column(nullable = false, unique = true)
     private String userUuid;
@@ -56,9 +56,8 @@ public class UserEntity extends BaseEntity {
         userEntity.setUserPhone(cleanedPhoneNumber);
 
         userEntity.setUserGender(userDto.getUserGender());
-        userEntity.setUserAble(userDto.getUserAble());
+        userEntity.setUserAble(1);
         userEntity.setUserUuid(UUID.randomUUID().toString());
         return userEntity;
     }
-
 }

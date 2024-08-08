@@ -30,6 +30,9 @@ public class WordTestEntity extends BaseEntity {
     @Column
     private Integer questionCount;
 
+    @Column
+    private Integer testAble;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "word_info_idx", referencedColumnName = "idx")
     private WordEntity wordInfo;

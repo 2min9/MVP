@@ -128,7 +128,7 @@
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
-                    <a class="logo">
+                    <a href="/main2" class="logo">
                         <h1 class="jua-regular">M.V.P.</h1>
                     </a>
                 </nav>
@@ -136,6 +136,8 @@
         </div>
     </div>
 </header>
+
+
 
 <div class="main-banner" id="top" style="padding: 90px 0 0;"></div>
 
@@ -159,9 +161,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- 시험 목록 데이터 반복 처리 -->
+                    <!-- 실제 데이터 표시 -->
                     <tr th:each="test : ${testPage?.content}"
-                        th:if="${test.userInfo.userUuid == session.userUuid}"
+                        th:if="${testAbleMap[test.idx] == 1}"
                         th:onclick="'location.href=\'/App/testDetail/' + ${test.idx} + '\''">
                         <td th:text="${test.testPoint}"></td>
                         <td>
@@ -207,7 +209,7 @@
         <div class="col-lg-5 align-self-center">
             <div class="section-heading">
                 <div class="main-button">
-                    <a th:href="@{/App/MyPage/{sessionIdx}(sessionIdx = ${session.idx})}" style="border: 1px solid; font-size: 1em; font-weight: 900;">
+                    <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;">
                         <img src="../../assets/images/back-arrow.png" style="width: 22px; margin-bottom: 3px;"> 뒤로
                     </a>
                 </div>

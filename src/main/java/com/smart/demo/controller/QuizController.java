@@ -52,7 +52,6 @@ public class QuizController {
     @Autowired
     private UserRepository userRepository;
 
-
     @Autowired
     public QuizController(WordService wordService, TestResultRepository testResultRepository, WordTestService wordTestService) {
         this.wordService = wordService;
@@ -68,33 +67,6 @@ public class QuizController {
     @GetMapping("/App/level_test")
     public String level_testForm() {
         return "App/level_test";
-    }
-
-    @GetMapping("/App/TestSelectLevel")
-    public String TestSelectLevel() {
-        return "App/TestSelectLevel";
-    }
-
-    @GetMapping("/App/MemorizeSelectMode/{idx}")
-    public String MemorizeSelectMode(@PathVariable Integer idx, Model model) {
-        UserDto userDto = userService.findById(idx);
-        model.addAttribute("user", userDto);
-        return "App/MemorizeSelectMode";
-    }
-
-    @GetMapping("/App/MemorizeSelectLevel")
-    public String MemorizeSelectLevel() {
-        return "App/MemorizeSelectLevel";
-    }
-
-    @GetMapping("/App/ResultSelectMode")
-    public String ResultSelectMode() {
-        return "App/ResultSelectMode";
-    }
-
-    @GetMapping("/App/ResultSelectLevel")
-    public String ResultSelectLevel() {
-        return "App/ResultSelectLevel";
     }
 
     @GetMapping("/App/Quiz/Memorize/{wordLevel}")
@@ -148,7 +120,7 @@ public class QuizController {
     }
 
     @PostMapping("/checkAnswerMemorize")
-    public String checkAnswerMemorize(@RequestParam Integer wordIdx, @RequestParam String userAnswer, Model model, HttpSession session) {
+    public String checkAnswerMemorize(@RequestParam Integer wordIdx, @RequestParam String userAnswer, Model model) {
         // 단어 ID를 사용하여 정답을 가져옵니다.
         WordDto wordDto = wordService.findById(wordIdx);
 
@@ -246,13 +218,10 @@ public class QuizController {
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
         Integer solvedCount = (Integer) session.getAttribute("solvedCount");
         List<Integer> solvedWords = (List<Integer>) session.getAttribute("solvedWords");
-        String examMode = (String) session.getAttribute("examMode");
 
         if (solvedCount == null) {
             solvedCount = 1;
         }
-
-        Integer testNum = solvedCount;
 
         // 세션에서 WordTestEntity를 가져옵니다
         WordTestEntity wordTestEntity = (WordTestEntity) session.getAttribute("wordTestEntity");
@@ -295,6 +264,7 @@ public class QuizController {
                 testPoint += pointsPerQuestion; // 정답 점수 증가
 
                 wordTestEntity.setTestPoint(testPoint);
+                wordTestEntity.setSolvedCount(solvedCount);
                 wordTestRepository.save(wordTestEntity);
             } else if (cleanedUserAnswer.trim().isEmpty()) {
                 ox = "X"; // 답변이 비어 있는 경우 "X"로 처리
@@ -328,6 +298,7 @@ public class QuizController {
             if (totalQuestions == null) {
                 totalQuestions = wordList.size();
                 wordTestEntity.setQuestionCount(totalQuestions);
+                wordTestEntity.setTestAble(1);
                 wordTestRepository.save(wordTestEntity);
             }
 
@@ -421,7 +392,7 @@ public class QuizController {
         // 사용자 답변 정리
         String cleanedUserAnswer = (userAnswer != null && !userAnswer.trim().isEmpty())
                 ? userAnswer.replaceAll("[^a-zA-Z]", "") // 영어 문자만 허용
-                : "X";
+                : "미입력";
 
         String ox = "X";
 
@@ -576,6 +547,7 @@ public class QuizController {
         wordTestEntity.setTestPoint(0); // 초기 점수 0 설정
         wordTestEntity.setUserInfo(userEntity); // UserEntity 설정
         wordTestEntity.setQuestionCount(questionCount); // 전체 문제 수 설정
+        wordTestEntity.setTestAble(1);
 
         // examMode에 따라 language 설정
         if ("korEng".equals(examMode)) {
@@ -623,13 +595,15 @@ public class QuizController {
         Pageable pageable = PageRequest.of(page, size);
 
         // 사용자의 테스트 목록을 페이징 처리하여 가져옵니다.
-        Page<WordTestEntity> testPage = wordTestRepository.findByUserInfo_UserUuid(userUuid, pageable);
+        Page<WordTestEntity> testPage = wordTestRepository.findByUserInfo_UserUuidAndTestAble(userUuid, 1, pageable);
 
         // testPage가 null인지 체크
         if (testPage == null) {
             model.addAttribute("errorMessage", "테스트 목록을 불러오는 데 실패했습니다.");
             return "error"; // 에러 페이지로 이동
         }
+
+        Map<Integer, Integer> testAbleMap = new HashMap<>();
 
         // 시험 목록과 각 시험에 대한 맞춘 문제와 전체 문제 개수를 계산
         for (WordTestEntity test : testPage) {
@@ -643,13 +617,17 @@ public class QuizController {
 
             test.setSolvedCount((int) solvedCount);
             test.setQuestionCount((int) totalCount);
+
+            testAbleMap.put(test.getIdx(), test.getTestAble());
         }
 
         model.addAttribute("testPage", testPage);
         model.addAttribute("examMode", examMode);
+        model.addAttribute("testAbleMap", testAbleMap);
 
         return "App/testList";
     }
+
 
 
     // QuizController.java
@@ -677,6 +655,8 @@ public class QuizController {
                 LocalDateTime createdTime = results.get(0).getCreatedTime();
                 model.addAttribute("createdTime", createdTime);
             }
+
+            model.addAttribute("wordTest", wordTestEntity);
 
             // 언어 정보 모델에 추가
             int language = wordTestEntity.getLanguage();
@@ -738,6 +718,9 @@ public class QuizController {
         return response;
     }
 
-
-
+    @GetMapping("/testDetail/delete/{idx}")
+    public String deleteTest(@PathVariable Integer idx) {
+        wordTestService.disableTest(idx);
+        return "redirect:/App/testList";
+    }
 }

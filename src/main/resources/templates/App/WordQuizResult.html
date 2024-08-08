@@ -241,10 +241,10 @@
 
         .modal-content {
             background-color: #fefefe;
-            padding: 20px;
+            padding: 50px 20px 40px 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 300px;
+            width: 90%;
+            max-width: 350px;
             text-align: center;
             border-radius: 10px;
             position: absolute;
@@ -253,13 +253,13 @@
             transform: translate(-50%, -50%);
         }
 
-        .close-button {
-            background-color: #ff0000;
-            color: white;
-            padding: 10px 20px;
+        .exit {
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            border-radius: 20px;
+            background: green;
+            color: white;
+            font-size: 1.3em;
+            padding: 5px;
         }
     </style>
 </head>
@@ -284,7 +284,7 @@
     <div class="row">
         <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a class="logo" style="margin-left: 63%;">
+            <a href="/main2" class="logo" style="margin-left: 74%;">
                 <h1 class="jua-regular" id="timer"></h1>
             </a>
             <!-- ***** Logo End ***** -->
@@ -362,38 +362,30 @@
 <!-- 모달 -->
 <div id="myModal" class="modal">
     <div class="modal-content">
-        <span id="closeButton" class="close">&times;</span>
-        <p>시간이 지났습니다.</p>
-        <button id="exitButton" class="exit">다음</button>
+        <p style="font-size: 3em; margin-bottom: 30px;">Time Over</p>
+        <button th:if="${solvedCount != totalQuestion}" id="exitButton" class="exit">다음</button>
+        <button th:if="${solvedCount == totalQuestion}" id="exitButton" class="exit">제출</button>
     </div>
 </div>
 
-<!-- 모달이 닫히지 않게 설정하는 모달 -->
-<div id="exitModal" class="modal">
-    <div class="modal-content">
-        <p>마지막 시간이 지났습니다</p>
-        <button id="confirmExit">제출</button>
-    </div>
-</div>
 <script th:inline="javascript">
     var sessionIdx = [[${session.idx}]];
 </script>
-
+<script type="text/javascript">
+    var wordIdx = [[${word.idx}]];
+    var wordTestIdx = [[${session.wordTestEntity.idx}]];
+</script>
 <script>
     const totalTime = 20;
     let timeRemaining = totalTime;
 
     const timerElement = document.getElementById('timer');
     const modal = document.getElementById('myModal');
-    const closeButton = document.getElementById('closeButton');
-    const exitmodal = document.getElementById('exitModal');
     const exitButton = document.getElementById('exitButton');
-    const confirmExit = document.getElementById('confirmExit');
 
     function updateTimer() {
-        const minutes = Math.floor(timeRemaining / 60);
         const seconds = timeRemaining % 60;
-        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        timerElement.textContent = `${seconds.toString().padStart(2, '0')}`;
 
         if (timeRemaining > 0) {
             timeRemaining--;
@@ -403,35 +395,48 @@
         }
     }
 
-    closeButton.onclick = function () {
-        modal.style.display = "none";
-        window.location.href = '/App/Quiz/Next';
-    }
-
     exitButton.onclick = function () {
+        // 모달 숨기기
         modal.style.display = "none";
-        window.location.href = '/App/testList';
-    }
 
-    confirmExit.onclick = function () {
-        exitmodal.style.display = "none";
-        window.location.href = '/App/testList';
-    }
+        // 폼 생성
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/checkAnswer'; // Thymeleaf URL 매핑에 따라 수정 필요
 
+        // 필요한 데이터 필드 추가
+        var wordIdxInput = document.createElement('input');
+        wordIdxInput.type = 'hidden';
+        wordIdxInput.name = 'wordIdx'; // 파라미터 이름
+        wordIdxInput.value = wordIdx; // 실제 값으로 대체
+        form.appendChild(wordIdxInput);
+
+        var wordTestIdxInput = document.createElement('input');
+        wordTestIdxInput.type = 'hidden';
+        wordTestIdxInput.name = 'wordTest.idx'; // 파라미터 이름
+        wordTestIdxInput.value = wordTestIdx; // 실제 값으로 대체
+        form.appendChild(wordTestIdxInput);
+
+        var userAnswerInput = document.createElement('input');
+        userAnswerInput.type = 'text';
+        userAnswerInput.name = 'userAnswer'; // 파라미터 이름
+        userAnswerInput.value = document.getElementById('otpInput').value; // 입력 필드 값
+        form.appendChild(userAnswerInput);
+
+        // 폼을 문서에 추가하고 제출
+        document.body.appendChild(form);
+        form.submit();
+    }
 
     // 바깥 클릭해도 모달 닫히지 않게 설정
     window.onclick = function (event) {
-        if (event.target == modal || event.target == exitmodal) {
+        if (event.target == modal) {
             event.stopPropagation();
         }
     }
 
     // 모달 내용 내부 클릭시 이벤트 전파 중지
     modal.querySelector('.modal-content').onclick = function (event) {
-        event.stopPropagation();
-    }
-
-    exitmodal.querySelector('.modal-content').onclick = function (event) {
         event.stopPropagation();
     }
 
@@ -451,6 +456,7 @@
     });
 
     function speak(text, opt_prop) {
+
         const prop = opt_prop || {};
 
         const speechMsg = new SpeechSynthesisUtterance();

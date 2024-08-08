@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WordTestRepository extends JpaRepository<WordTestEntity, Integer> {
 
-    Page<WordTestEntity> findByUserInfo_UserUuid(String userUuid, Pageable pageable);}
+    Page<WordTestEntity> findByUserInfo_UserUuidAndTestAble(String userUuid, int testAble, Pageable pageable);
+}

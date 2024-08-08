@@ -45,6 +45,7 @@
 
             .events .item {
                 margin-top: -10%;
+                margin-bottom: 40px;
             }
 
             .pro_area {
@@ -226,7 +227,7 @@
     </style>
 </head>
 
-<body>
+<body >
 
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
@@ -418,7 +419,6 @@
     </div>
 </div>
 
-
 <div class="btn-area" style="margin-bottom: -8%;">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
         <div class="col-lg-5 align-self-center">
@@ -426,6 +426,19 @@
                 <div class="main-button">
                     <a href="/App/testList" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
                             src="../../assets/images/back-arrow.png" style="width: 22px; margin-bottom: 3px;">뒤로</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="btn-area" style="margin-bottom: -8%;">
+    <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+        <div class="col-lg-5 align-self-center">
+            <div class="section-heading">
+                <div class="main-button">
+                    <a th:href="@{'/testDetail/delete/' + ${wordTest.idx}}" style="border: 1px solid; font-size: 1em; font-weight: 900; padding: 0 20px;"><img
+                            src="../../assets/images/delete.png" style="width: 27px; margin-bottom: 3px; margin-right: 5px">삭제</a>
                 </div>
             </div>
         </div>
@@ -533,7 +546,6 @@
 <script src="../../assets/js/owl-carousel.js"></script>
 <script src="../../assets/js/counter.js"></script>
 <script src="../../assets/js/custom.js"></script>
-</div>
 </body>
 
 </html>

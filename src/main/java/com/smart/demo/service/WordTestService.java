@@ -41,4 +41,12 @@
             return wordTestRepository.findById(id).orElse(null);
         }
 
+        @Transactional
+        public void disableTest(Integer idx) {
+            WordTestEntity wordTest = wordTestRepository.findById(idx)
+                    .orElseThrow(() -> new RuntimeException("Test not found"));
+
+            wordTest.setTestAble(0);
+            wordTestRepository.save(wordTest);
+        }
     }

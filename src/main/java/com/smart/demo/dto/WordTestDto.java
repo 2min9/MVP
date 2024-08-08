@@ -2,6 +2,7 @@ package com.smart.demo.dto;
 
 import com.smart.demo.entity.UserEntity;
 import com.smart.demo.entity.WordEntity;
+import com.smart.demo.entity.WordTestEntity;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,7 @@ public class WordTestDto {
     private LocalDateTime updatedTime;
     private UserEntity userInfo; // UserEntity 참조
     private List<TestResultDto> results;
-
+    private Integer testAble;
 
     @Getter
     @Setter

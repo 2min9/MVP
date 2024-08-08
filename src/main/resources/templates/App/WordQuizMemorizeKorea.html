@@ -269,7 +269,7 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
+                    <a class="logo">
                         <h1 class="jua-regular">M.V.P.</h1>
                     </a>
                     <!-- ***** Logo End ***** -->
@@ -303,7 +303,7 @@
                     <input type="hidden" name="wordIdx" th:value="${word.idx}" />
                     <div class="inp">
                         <!-- 단어 10개로 제한 -> 단어 길이 받아와서 해야할듯 -->
-                        <input maxlength="10" class="input" type="text" id="otpInput" name="userAnswer" required>
+                        <input maxlength="10" class="input" type="text" id="otpInput" name="userAnswer">
                     </div>
                     <button type="submit">Submit</button>
                 </div>

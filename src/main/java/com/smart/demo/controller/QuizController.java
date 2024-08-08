@@ -269,7 +269,7 @@ public class QuizController {
         // 사용자 답변 정리
         String cleanedUserAnswer = (userAnswer != null && !userAnswer.trim().isEmpty())
                 ? userAnswer.replaceAll("[^a-zA-Z0-9가-힣]", "")
-                : "X"; // 답변이 없을 경우 공백 설정
+                : "미입력"; // 답변이 없을 경우 공백 설정
 
         String ox = "X";
 

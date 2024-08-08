@@ -273,7 +273,7 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
+                    <a class="logo">
                         <h1 class="jua-regular">M.V.P.</h1>
                     </a>
                     <!-- ***** Logo End ***** -->
@@ -284,7 +284,7 @@
     <div class="row">
         <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo" style="margin-left: 63%;">
+            <a class="logo" style="margin-left: 63%;">
                 <h1 class="jua-regular" id="timer"></h1>
             </a>
             <!-- ***** Logo End ***** -->
@@ -317,7 +317,7 @@
                         <div class="inp" th:if="${quizMode}">
                             <input type="hidden" name="wordIdx" th:value="${word.idx}" />
                             <input type="hidden" name="wordTestEntityId" th:value="${session.wordTestEntity.idx}" />
-                            <input type="text" class="input" maxlength="50" id="otpInput" name="userAnswer" required />
+                            <input type="text" class="input" maxlength="50" id="otpInput" name="userAnswer" />
                         </div>
                         <button style="margin-top: 16px; position: relative; left: 32%;" type="submit">등록</button>
                     </form>

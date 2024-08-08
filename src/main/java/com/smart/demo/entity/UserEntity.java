@@ -36,7 +36,7 @@ public class UserEntity extends BaseEntity {
     private char userGender;
 
     @Column
-    private Integer userAble = 1;
+    private Integer userAble;
 
     @Column(nullable = false, unique = true)
     private String userUuid;

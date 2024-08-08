@@ -273,7 +273,7 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/main2" class="logo">
+                    <a class="logo">
                         <h1 class="jua-regular">M.V.P.</h1>
                     </a>
                     <!-- ***** Logo End ***** -->
@@ -284,7 +284,7 @@
     <div class="row">
         <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="/main2" class="logo" style="margin-left: 63%;">
+            <a class="logo" style="margin-left: 63%;">
                 <h1 class="jua-regular" id="timer"></h1>
             </a>
             <!-- ***** Logo End ***** -->
@@ -317,7 +317,7 @@
                         <div class="inp" th:if="${quizMode}">
                             <input type="hidden" name="wordIdx" th:value="${word.idx}" />
                             <input type="hidden" name="wordTest.idx" th:value="${session.wordTestEntity.idx}" />
-                            <input type="text" class="input" style="width: 100%;" maxlength="10" id="otpInput" name="userAnswer"/>
+                            <input type="text" class="input" style="width: 100%;" maxlength="15" id="otpInput" name="userAnswer"/>
                         </div>
                         <button type="submit" style="margin-top: 16px; position: relative; left: 32%;"
                                 th:if="${solvedCount != totalQuestion}">다음</button>
@@ -359,22 +359,20 @@
         </svg>
     </div>
 </div>
-
 <!-- 모달 -->
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span id="closeButton" class="close">&times;</span>
-        <p>시험 시간이 종료되었습니다.</p>
-        <button id="exitButton" class="exit">시험 목록으로 돌아가기</button>
+        <p>시간이 지났습니다.</p>
+        <button id="exitButton" class="exit">다음</button>
     </div>
 </div>
 
 <!-- 모달이 닫히지 않게 설정하는 모달 -->
 <div id="exitModal" class="modal">
     <div class="modal-content">
-        <p>정말로 시험을 종료하시겠습니까?</p>
-        <button id="confirmExit">확인</button>
-        <button id="cancelExit">취소</button>
+        <p>마지막 시간이 지났습니다</p>
+        <button id="confirmExit">제출</button>
     </div>
 </div>
 <script th:inline="javascript">
@@ -391,7 +389,6 @@
     const exitmodal = document.getElementById('exitModal');
     const exitButton = document.getElementById('exitButton');
     const confirmExit = document.getElementById('confirmExit');
-    const cancelExit = document.getElementById('cancelExit');
 
     function updateTimer() {
         const minutes = Math.floor(timeRemaining / 60);
@@ -421,9 +418,6 @@
         window.location.href = '/App/testList';
     }
 
-    cancelExit.onclick = function () {
-        exitmodal.style.display = "none";
-    }
 
     // 바깥 클릭해도 모달 닫히지 않게 설정
     window.onclick = function (event) {
@@ -457,8 +451,6 @@
     });
 
     function speak(text, opt_prop) {
-        window.speechSynthesis.cancel(); // 현재 읽고있다면 초기화
-
         const prop = opt_prop || {};
 
         const speechMsg = new SpeechSynthesisUtterance();

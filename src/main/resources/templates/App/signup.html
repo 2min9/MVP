@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <link href="../../css/signup.css" rel="stylesheet">
     <meta charset="UTF-8">
@@ -99,20 +99,20 @@
     <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
 
     <label style="display: flex; flex-direction: row;">
-        <input class="number" name="userPhone" id="phone" type="tel" placeholder="" minlength="11" maxlength="11" required>
+        <input class="input" name="userPhone" id="phone" type="tel" placeholder="" minlength="11" maxlength="11" required>
         <span>Phone</span>
-        <div class="btn">verifiy</div>
+<!--        <div class="btn">verifiy</div>-->
     </label>
 
-    <label style="display: flex; flex-direction: row;">
-        <input class="number" type="text" placeholder="">
-        <span>Certification Number</span>
-        <div class="btn2">registration</div>
-    </label>
+<!--    <label style="display: flex; flex-direction: row;">-->
+<!--        <input class="number" type="text" placeholder="">-->
+<!--        <span>Certification Number</span>-->
+<!--        <div class="btn2">registration</div>-->
+<!--    </label>-->
 
     <button class="submit" type="submit">Submit</button>
     <button onclick="home()" class="back">Back</button>
-    <p class="signin">Already have an account ? <a onclick="home()">Signin</a> </p>
+    <p class="signin">Already have an account ? <a onclick="home()">Sign in</a> </p>
 </form>
 
 <!-- Modal Structure -->

@@ -10,16 +10,17 @@
     <!-- Bootstrap core CSS -->
     <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Single+Day&family=Sunflower:wght@300&display=swap"
+          rel="stylesheet">
+
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="../../assets/css/fontawesome.css">
     <link rel="stylesheet" href="../../assets/css/templatemo-scholar.css">
     <link rel="stylesheet" href="../../assets/css/owl.css">
     <link rel="stylesheet" href="../../assets/css/animate.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Single+Day&family=Sunflower:wght@300&display=swap"
-          rel="stylesheet">
 
     <style>
         .bottom_bar {
@@ -187,8 +188,8 @@
                             </li>
                             <li style="margin-top: 9%; margin-left: -8%;">
                                 <span>전화번호</span>
-<!--                                <h6 style="width: 150%" th:text="${user.userPhone}"></h6>-->
-                                    <h6 style="width: 150%" th:text="${user.userPhone.substring(0, 3) + '-' + user.userPhone.substring(3, 7) + '-' + user.userPhone.substring(7)}"></h6>                            </li>
+                                <h6 style="width: 150%" th:text="${user.userPhone}"></h6>
+                                <!--                                <h6 style="width: 150%" th:text="${user.userPhone.substring(0, 3) + '-' + user.userPhone.substring(3, 7) + '-' + user.userPhone.substring(7)}"></h6>                            </li>-->
                             <li style="margin-top: 9%; margin-left: 17%;">
                                 <span>생년월일</span>
                                 <h6 style="width: 120%" th:text="${user.userBirth}"></h6>
@@ -221,7 +222,7 @@
             <div class="col-lg-5 align-self-center">
                 <div class="section-heading">
                     <div class="main-button">
-                        <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;" onclick="history.back()"><img
+                        <a onclick="history.back()" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
                                 src="../../assets/images/back-arrow.png" style="width: 22px; margin-bottom: 3px;">뒤로</a>
                     </div>
                 </div>
@@ -313,6 +314,7 @@
 </div>
 
 <!-- 게스트 -->
+
 <div th:if="${session.idx == 0}" class="section events" id="events" style="margin-top: 10px;">
     <div class="container">
         <div class="row">
@@ -347,9 +349,11 @@
                             <li style="margin-top: 9%; margin-left: -8%;">
                                 <span>전화번호</span>
                                 <h6 style="width: 150%">Guest</h6>
-                            <li style="margin-top: 9%; margin-left: 11%;">
+                                <!--                                <h6 style="width: 150%" th:text="${user.userPhone.substring(0, 3) + '-' + user.userPhone.substring(3, 7) + '-' + user.userPhone.substring(7)}"></h6>                            </li>-->
+                            <li style="margin-top: 9%; margin-left: 17%;">
                                 <span>생년월일</span>
-                                <h6 style="margin-left: -5%; width: 87%;">Guest</h6>
+                                <h6 style="width: 120%">Guest</h6>
+
                             </li>
                         </ul>
                     </div>

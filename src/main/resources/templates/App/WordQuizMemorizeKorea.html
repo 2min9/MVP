@@ -287,9 +287,9 @@
     <div class="container">
         <div class="row">
             <!-- <div class="col-lg-12 text-center" > -->
-            <div class="section-heading" style="margin-bottom: 3.5em;">
+            <div class="section-heading" style="margin-bottom: 3.5em; display: flex; flex-direction: row;">
                 <h2 class="jua-regular" style="margin: 0; margin-left: 3%;">단어 외우기</h2>
-
+                <h3 class="jua-regular" style="margin: 0; margin-left: 27%; font-size: 2.1em;">No.<span th:text="${session.solvedCount}" style="-webkit-text-stroke: 1px black; color: white;"></span></h3>
             </div>
         </div>
         <!-- 문제 나오는 곳 + 적는곳 -->
@@ -305,24 +305,23 @@
                         <!-- 단어 10개로 제한 -> 단어 길이 받아와서 해야할듯 -->
                         <input maxlength="10" class="input" type="text" id="otpInput" name="userAnswer">
                     </div>
-                    <button type="submit">다음</button>
+                    <button type="submit">제출</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-</div>
 
 <div class="btn-area" style="margin-bottom: -8%;">
     <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
-        <div class="col-lg-5 align-self-center">
-            <div class="section-heading">
-                <div class="main-button">
-                    <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img
-                            src="../../assets/images/left-arrow.png" style="width: 30px; margin-bottom: 3px;"></a>
-                </div>
-            </div>
-        </div>
+        <!--        <div class="col-lg-5 align-self-center">-->
+        <!--            <div class="section-heading">-->
+        <!--                <div class="main-button">-->
+        <!--                    <a href="#" style="border: 1px solid; font-size: 1em; font-weight: 900;"><img-->
+        <!--                            src="../../assets/images/left-arrow.png" style="width: 30px; margin-bottom: 3px;"></a>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
 
         <div class="col-lg-5 align-self-center">
             <div class="section-heading">
@@ -343,6 +342,12 @@
          class="O" id="resultImageX" alt="Test Image">
 </div>
 
+<!-- word Detail 나오는 곳 -->
+<div th:if="${resultMessage2 != null || resultMessage != null}" style="width: 90%; position: relative; left: 5%">
+    <div th:classappend="${resultMessage2} != 'null' ? 'on'">
+        <span th:text="${word.wordDetail}"></span>
+    </div>
+</div>
 
 <!-- under bar -->
 <div id="app">
@@ -373,11 +378,7 @@
     </div>
 </div>
 
-<div th:if="${resultMessage2 != null || resultMessage != null}" style="width: 90%; position: relative; left: 5%">
-    <div th:classappend="${resultMessage2} != 'null' ? 'on'">
-        <span th:text="${word.wordName}"></span>
-    </div>
-</div>
+
 
 <!-- 1초뒤에 이미지 사라지게 하기 -->
 <script>

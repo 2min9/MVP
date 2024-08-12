@@ -73,6 +73,16 @@ public class QuizKoreaController {
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
         String examMode = (String) session.getAttribute("examMode");
 
+        Integer solvedCount = (Integer) session.getAttribute("solvedCount");
+
+        if(solvedCount == null) {
+            solvedCount = 1;
+        } else {
+            solvedCount++;
+        }
+
+        session.setAttribute("solvedCount", solvedCount);
+
         // 풀었던 단어 목록을 초기화하거나, 최초 접근인 경우에는 생성
         if (solvedWords == null) {
             solvedWords = new ArrayList<>();
@@ -103,7 +113,6 @@ public class QuizKoreaController {
     public String checkAnswerMemorizeKorea(@RequestParam Integer wordIdx, @RequestParam String userAnswer, Model model, HttpSession session) {
         // 단어 ID를 사용하여 정답을 가져옵니다.
         WordDto wordDto = wordService.findById(wordIdx);
-
         if (wordDto != null) {
             String[] names = wordDto.getWordName().split(", ");
             boolean isCorrect = Arrays.stream(names)

@@ -93,6 +93,16 @@ public class QuizController {
         List<WordDto> wordList = (List<WordDto>) session.getAttribute("wordList");
         String examMode = (String) session.getAttribute("examMode");
 
+        Integer solvedCount = (Integer) session.getAttribute("solvedCount");
+
+        if(solvedCount == null) {
+            solvedCount = 1;
+        } else {
+            solvedCount++;
+        }
+
+        session.setAttribute("solvedCount", solvedCount);
+
         model.addAttribute("user", session);
         // 풀었던 단어 목록을 초기화하거나, 최초 접근인 경우에는 생성
         if (solvedWords == null) {
@@ -115,12 +125,12 @@ public class QuizController {
             return "App/WordQuizMemorize"; // 단어 맞추기 및 결과 페이지로 이동
         } else {
             // 단어가 없을 경우 처리
-            return "redirect:/main2"; // 메인 페이지로 이동
+            return "redirect:/main2"; // 리스트 페이지로 이동
         }
     }
 
     @PostMapping("/checkAnswerMemorize")
-    public String checkAnswerMemorize(@RequestParam Integer wordIdx, @RequestParam String userAnswer, Model model) {
+    public String checkAnswerMemorize(@RequestParam Integer wordIdx, @RequestParam String userAnswer, Model model, HttpSession session) {
         // 단어 ID를 사용하여 정답을 가져옵니다.
         WordDto wordDto = wordService.findById(wordIdx);
 
@@ -591,10 +601,11 @@ public class QuizController {
         // 세션에서 사용자 UUID를 가져옵니다.
         String userUuid = (String) session.getAttribute("userUuid");
         String examMode = (String) session.getAttribute("examMode");
+
         // Pageable 객체 생성
         Pageable pageable = PageRequest.of(page, size);
 
-        // 사용자의 테스트 목록을 페이징 처리하여 가져옵니다.
+        // 사용자의 테스트 목록을 페이징 처리하여 가져옵니다. (testAble이 1인 것만)
         Page<WordTestEntity> testPage = wordTestRepository.findByUserInfo_UserUuidAndTestAble(userUuid, 1, pageable);
 
         // testPage가 null인지 체크
@@ -602,8 +613,6 @@ public class QuizController {
             model.addAttribute("errorMessage", "테스트 목록을 불러오는 데 실패했습니다.");
             return "error"; // 에러 페이지로 이동
         }
-
-        Map<Integer, Integer> testAbleMap = new HashMap<>();
 
         // 시험 목록과 각 시험에 대한 맞춘 문제와 전체 문제 개수를 계산
         for (WordTestEntity test : testPage) {
@@ -617,13 +626,11 @@ public class QuizController {
 
             test.setSolvedCount((int) solvedCount);
             test.setQuestionCount((int) totalCount);
-
-            testAbleMap.put(test.getIdx(), test.getTestAble());
         }
 
+        // 모델에 시험 목록과 기타 정보를 추가
         model.addAttribute("testPage", testPage);
         model.addAttribute("examMode", examMode);
-        model.addAttribute("testAbleMap", testAbleMap);
 
         return "App/testList";
     }

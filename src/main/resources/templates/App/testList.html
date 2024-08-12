@@ -161,9 +161,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- 실제 데이터 표시 -->
+                    <!-- 시험 목록 데이터 반복 처리 -->
                     <tr th:each="test : ${testPage?.content}"
-                        th:if="${testAbleMap[test.idx] == 1}"
+                        th:if="${test.userInfo.userUuid == session.userUuid}"
                         th:onclick="'location.href=\'/App/testDetail/' + ${test.idx} + '\''">
                         <td th:text="${test.testPoint}"></td>
                         <td>

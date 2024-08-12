@@ -253,7 +253,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/App/mypage-reset_pw/{idx}")
+    @GetMapping("/App/mypage_reset_pw/{idx}")
     public String mypage_reset_pwForm(@PathVariable Integer idx, Model model) {
         // 세션에서 userIdx를 가져와서 UserDto 객체를 조회
         UserDto userDto = userService.findById(idx);
@@ -262,7 +262,7 @@ public class UserController {
         } else {
             return "redirect:/login"; // 로그인 페이지로 리디렉션
         }
-        return "/App/mypage-reset_pw";
+        return "mypage_reset_pw";
     }
 
     @PostMapping("/reset_pw/{idx}") // 기존 URL 패턴 유지
@@ -283,7 +283,7 @@ public class UserController {
             PrintWriter out = response.getWriter();
             out.println("<script>");
             out.println("alert('Invalid session. Please try again.');");
-            out.println("window.location.href='/App/mypage-reset_pw?userEmail=" + userEmail + "';");
+            out.println("window.location.href='/App/mypage_reset_pw?userEmail=" + userEmail + "';");
             out.println("</script>");
             out.close();
             return null; // 이 라인은 실제로는 도달하지 않음

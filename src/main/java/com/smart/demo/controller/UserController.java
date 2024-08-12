@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping("/App/signup")
     public String signup(@ModelAttribute UserDto userDto) {
         userService.save(userDto);
-        return "redirect:/App/login";
+            return "redirect:/App/login";
     }
 
     @GetMapping("/App/find_id")

@@ -252,6 +252,9 @@
             font-size: 1em;
         }
 
+        a{
+
+        }
     </style>
 </head>
 
@@ -331,8 +334,8 @@
                                 <label style="display: flex; flex-direction: row;">
                                     <!--/*@thymesVar id="sessionIdx" type=""*/-->
 <!--                                    <div th:onclick="window.location.href='/App/mypage-reset_pw/[[${user.idx}]]'" class="btn3">비밀번호 재설정</div>-->
-<!--                                    <a th:href="@{/App/mypage-reset_pw/{id}(id=${user.idx})}" class="btn3" role="button">비밀번호 재설정</a>-->
-                                    <div onclick="window.location.href='/App/mypage-reset_pw/${user.idx}'" class="btn3">비밀번호 재설정</div>
+                                    <a th:href="@{/App/mypage-reset_pw/{id}(id=${user.idx})}" class="btn3" role="button">비밀번호 재설정</a>
+<!--                                    <div onclick="window.location.href='/App/mypage-reset_pw/${user.idx}'" class="btn3">비밀번호 재설정</div>-->
                                 </label>
                                 <button type="submit" class="edit_btn">수정</button>
                             </div>

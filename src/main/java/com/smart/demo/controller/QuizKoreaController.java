@@ -95,7 +95,7 @@ public class QuizKoreaController {
             return "App/WordQuizMemorizeKorea"; // 단어 맞추기 및 결과 페이지로 이동
         } else {
             // 단어가 없을 경우 처리
-            return "redirect:/Admin/Word"; // 리스트 페이지로 이동
+            return "redirect:/main2"; // 리스트 페이지로 이동
         }
     }
 

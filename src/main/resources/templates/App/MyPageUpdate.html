@@ -318,16 +318,12 @@
 
                             <div class="auth">
                                 <label style="display: flex; flex-direction: row;">
-                                    <input class="number3" th:value="${user.userNickname}" name="userNickname" type="text" placeholder="" disabled>
-                                    <span>기존 별명</span>
-                                </label>
-                                <label style="display: flex; flex-direction: row;">
-                                    <input class="number2" name="userNickname" type="text" placeholder="" required>
-                                    <span>새 별명</span>
+                                    <input class="number2" th:value="${user.userNickname}" name="userNickname" type="text" placeholder="">
+                                    <span>별명</span>
                                 </label>
 
                                 <label style="display: flex; flex-direction: row;">
-                                    <input class="number2" th:value="${user.userPhone}" name="userPhone" type="text" placeholder="" minlength="11" maxlength="11" required>
+                                    <input class="number2" th:value="${user.userPhone}" name="userPhone" type="text" placeholder="" minlength="11" maxlength="15" required>
                                     <span>전화번호 수정</span>
                                 </label>
 

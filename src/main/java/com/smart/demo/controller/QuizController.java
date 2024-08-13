@@ -659,10 +659,10 @@ public class QuizController {
                 }
             }
             // 단일 createdTime을 설정, 예를 들어 첫 번째 결과의 createdTime을 사용
-//            if (!results.isEmpty()) {
-//                Timestamp createdTime = results.get(0).getCreatedTime();
-//                model.addAttribute("createdTime", createdTime);
-//            }
+            if (!results.isEmpty()) {
+                Timestamp createdTime = results.get(0).getCreatedTime();
+                model.addAttribute("createdTime", createdTime);
+            }
 
             model.addAttribute("wordTest", wordTestEntity);
 

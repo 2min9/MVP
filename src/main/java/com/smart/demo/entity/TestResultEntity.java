@@ -27,7 +27,7 @@ public class TestResultEntity {
     private String ox;
 
     @CreationTimestamp
-    @Column
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

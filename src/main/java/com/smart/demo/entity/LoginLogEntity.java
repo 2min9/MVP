@@ -2,6 +2,8 @@ package com.smart.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,14 +18,12 @@ public class LoginLogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 90)
     private String loginIp;
 
     @Column(nullable = false)
     private String loginUserAgent;
 
     @Column(nullable = false)
-    private LocalDateTime loginInTime;
-
-    private LocalDateTime loginOutTime; // 맞춤법 수정
+    private Timestamp loginInTime;
 }

@@ -170,7 +170,8 @@
                             <span th:text="${test.solvedCount}">맞춘 문제</span>/<span th:text="${test.questionCount}">전체 문제</span>
                         </td>
                         <td th:text="${test.level}"></td>
-                        <td th:text="${#temporals.format(test.createdTime, 'yyyy.MM.dd HH:mm')}"></td>
+<!--                        <td th:text="${#temporals.format(test.createdTime, 'yyyy.MM.dd HH:mm')}"></td>-->
+                        <td th:text="${#dates.format(test.createdTime, 'yyyy.MM.dd HH:mm')}"></td>
                     </tr>
                     </tbody>
                 </table>

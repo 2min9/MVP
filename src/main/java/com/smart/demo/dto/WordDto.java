@@ -5,6 +5,7 @@ import com.smart.demo.entity.WordEntity;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,8 +23,8 @@ public class WordDto {
     private String wordDetail;
     private char wordAble;
     private double word_incorrect_percent;
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
+    private Timestamp createdTime;
+    private Timestamp updatedTime;
 
     private String selectedWordName;
 

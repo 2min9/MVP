@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -659,7 +660,7 @@ public class QuizController {
             }
             // 단일 createdTime을 설정, 예를 들어 첫 번째 결과의 createdTime을 사용
             if (!results.isEmpty()) {
-                LocalDateTime createdTime = results.get(0).getCreatedTime();
+                Timestamp createdTime = results.get(0).getCreatedTime();
                 model.addAttribute("createdTime", createdTime);
             }
 

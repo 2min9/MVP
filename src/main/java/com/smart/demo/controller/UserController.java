@@ -101,7 +101,6 @@ public class UserController {
 
     @GetMapping("/App/logout")
     public String logout(HttpSession session) {
-        loginLogService.logLogout(session);
         session.invalidate();
         return "App/main1";
     }

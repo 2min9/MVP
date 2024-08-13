@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Service
@@ -32,20 +33,9 @@ public class LoginLogService {
         LoginLogEntity loginLog = new LoginLogEntity();
         loginLog.setLoginIp(loginIp);
         loginLog.setLoginUserAgent(userAgent);
-        loginLog.setLoginInTime(LocalDateTime.now());
+        loginLog.setLoginInTime(Timestamp.valueOf(LocalDateTime.now()));
 
         return loginLogRepository.save(loginLog);
-    }
-
-    public void logLogout(HttpSession session) {
-        Integer loginLogId = (Integer) session.getAttribute("loginLogId");
-        if (loginLogId != null) {
-            LoginLogEntity loginLog = loginLogRepository.findById(loginLogId)
-                    .orElseThrow(() -> new RuntimeException("Login log not found"));
-
-            loginLog.setLoginOutTime(LocalDateTime.now());
-            loginLogRepository.save(loginLog);
-        }
     }
 }
 

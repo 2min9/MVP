@@ -2,6 +2,7 @@ package com.smart.demo.dto;
 
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,5 +15,5 @@ public class TestResultDto {
     private String testNum;
     private String answer;
     private String ox;
-    private LocalDateTime createdTime;
+    private Timestamp createdTime;
 }

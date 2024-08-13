@@ -6,6 +6,7 @@ import com.smart.demo.entity.WordTestEntity;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class WordTestDto {
     private Integer idx;
     private Integer testPoint;
     private Integer level;
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
+    private Timestamp createdTime;
+    private Timestamp updatedTime;
     private UserEntity userInfo; // UserEntity 참조
     private List<TestResultDto> results;
     private Integer testAble;

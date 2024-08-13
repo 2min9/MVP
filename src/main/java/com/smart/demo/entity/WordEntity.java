@@ -17,19 +17,19 @@ public class WordEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
-    @Column
+    @Column(nullable = false, length = 30)
     private String wordName;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private Integer wordLevel;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String wordMean;
 
-    @Column
+    @Column(nullable = false)
     private String wordDetail;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private char wordAble;
 
     @OneToMany(mappedBy = "wordIdx", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

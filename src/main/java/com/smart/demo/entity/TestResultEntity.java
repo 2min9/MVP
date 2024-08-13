@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,18 +17,18 @@ public class TestResultEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
-    @Column
+    @Column(nullable = false)
     private Integer testNum;
 
-    @Column
+    @Column(nullable = false, length = 20)
     private String answer;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private String ox;
 
     @CreationTimestamp
     @Column
-    private LocalDateTime createdTime;
+    private Timestamp createdTime;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "word_test_entity_idx")

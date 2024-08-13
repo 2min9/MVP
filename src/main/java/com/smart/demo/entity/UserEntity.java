@@ -14,28 +14,28 @@ public class UserEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
-    @Column
+    @Column(nullable = false, length = 30)
     private String userName;
 
-    @Column
+    @Column(nullable = false, length = 30)
     private String userNickname;
 
-    @Column
+    @Column(nullable = false, length = 40)
     private String userEmail;
 
-    @Column
+    @Column(nullable = false)
     private String userPassword;
 
-    @Column
+    @Column(nullable = false, length = 10)
     private String userBirth;
 
-    @Column
+    @Column(nullable = false, length = 15)
     private String userPhone;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private char userGender;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private Integer userAble;
 
     @Column(nullable = false, unique = true)

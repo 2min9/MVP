@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -42,7 +43,7 @@ public class UserDto {
 
     private String userUuid;
 
-    private LocalDateTime created_time;
+    private Timestamp created_time;
 
     public static UserDto toUserDto(UserEntity userEntity) {
         UserDto userDto = new UserDto();

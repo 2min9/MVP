@@ -15,22 +15,22 @@ public class WordTestEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private Integer level;
 
-    @Column
+    @Column(length = 3)
     private Integer testPoint;
 
-    @Column
+    @Column(length = 2)
     private Integer solvedCount;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private Integer language;
 
-    @Column
+    @Column(length = 2)
     private Integer questionCount;
 
-    @Column
+    @Column(nullable = false, length = 1)
     private Integer testAble;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

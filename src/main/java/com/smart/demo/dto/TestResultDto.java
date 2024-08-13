@@ -15,5 +15,5 @@ public class TestResultDto {
     private String testNum;
     private String answer;
     private String ox;
-    private Timestamp createdTime;
+//    private Timestamp createdTime;
 }

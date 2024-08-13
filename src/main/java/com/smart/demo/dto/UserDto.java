@@ -43,7 +43,7 @@ public class UserDto {
 
     private String userUuid;
 
-    private Timestamp created_time;
+//    private Timestamp created_time;
 
     public static UserDto toUserDto(UserEntity userEntity) {
         UserDto userDto = new UserDto();
@@ -57,7 +57,7 @@ public class UserDto {
         userDto.setUserGender(userEntity.getUserGender());
         userDto.setUserAble(userEntity.getUserAble());
         userDto.setUserUuid(userEntity.getUserUuid());
-        userDto.setCreated_time(userEntity.getCreatedTime());
+//        userDto.setCreated_time(userEntity.getCreatedTime());
         return userDto;
     }
 }

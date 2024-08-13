@@ -21,8 +21,8 @@ public class WordTestDto {
     private Integer idx;
     private Integer testPoint;
     private Integer level;
-    private Timestamp createdTime;
-    private Timestamp updatedTime;
+//    private Timestamp createdTime;
+//    private Timestamp updatedTime;
     private UserEntity userInfo; // UserEntity 참조
     private List<TestResultDto> results;
     private Integer testAble;

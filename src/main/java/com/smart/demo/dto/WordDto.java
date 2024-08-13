@@ -23,8 +23,8 @@ public class WordDto {
     private String wordDetail;
     private char wordAble;
     private double word_incorrect_percent;
-    private Timestamp createdTime;
-    private Timestamp updatedTime;
+//    private Timestamp createdTime;
+//    private Timestamp updatedTime;
 
     private String selectedWordName;
 
@@ -46,8 +46,8 @@ public class WordDto {
                 .wordMean(wordEntity.getWordMean())
                 .wordDetail(wordEntity.getWordDetail())
                 .wordAble(wordEntity.getWordAble())
-                .createdTime(wordEntity.getCreatedTime())
-                .updatedTime(wordEntity.getUpdatedTime())
+//                .createdTime(wordEntity.getCreatedTime())
+//                .updatedTime(wordEntity.getUpdatedTime())
                 .build();
     }
 

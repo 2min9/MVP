@@ -14,5 +14,5 @@ public class UserLogDto {
     private String sessionId;
     private String connectionUrl;
     private String method;
-    private LocalDateTime connectionTime;
+//    private LocalDateTime connectionTime;
 }

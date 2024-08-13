@@ -257,7 +257,7 @@
                 <!-- <h6>개인정보 수정</h6> -->
                 <h2 class="jua-regular" style="margin: 0; margin-left: 3%;">시험 목록 상세</h2>
 <!--                <p><span class="timestamp" th:text="${#temporals.format(createdTime, 'yyyy.MM.dd HH:mm')}"></span></p>-->
-                <p><span class="timestamp" th:text="${#dates.format(createdTime, 'yyyy.MM.dd HH:mm:ss')}"></span></p>
+                <p><span class="timestamp" th:text="${#dates.format(createdTime, 'yyyy.MM.dd HH:mm:ss', 'Asia/Seoul')}"></span></p>
 
             </div>
             <span th:text="${result}"></span>

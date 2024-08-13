@@ -270,12 +270,18 @@
                 return (new Date(cellA) - new Date(cellB)) * direction;
             }
 
+            if (column === 'score') {
+                // Convert cell values to numbers for comparison
+                return (parseFloat(cellA) - parseFloat(cellB)) * direction;
+            }
+
             return (cellA.localeCompare(cellB, 'ko')) * direction;
         });
 
         rows.forEach(row => table.querySelector('tbody').appendChild(row));
         sortDirection[column] *= -1;
     }
+
 
     // Highlight levels
     document.addEventListener('DOMContentLoaded', function () {

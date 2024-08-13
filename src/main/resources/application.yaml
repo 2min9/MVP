@@ -28,6 +28,10 @@ spring:
         show_sql: true
         format_sql: true
 
+    # Jackson Timezone Configuration
+  jackson:
+    time-zone: Asia/Seoul
+
 logging:
   level:
     org:

@@ -262,7 +262,7 @@ public class UserController {
         } else {
             return "redirect:/login"; // 로그인 페이지로 리디렉션
         }
-        return "mypage_reset_pw";
+        return "App/mypage_reset_pw";
     }
 
     @PostMapping("/reset_pw/{idx}") // 기존 URL 패턴 유지

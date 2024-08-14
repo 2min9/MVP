@@ -99,16 +99,16 @@
     <p id="confirmMsg" style="margin: -3% 0 0 0; color: green;"></p>
 
     <label style="display: flex; flex-direction: row;">
-        <input class="input" name="userPhone" id="phone" type="tel" placeholder="" minlength="11" maxlength="15" required>
+        <input class="input" name="userPhone" id="phone" pattern="[0-9]*" type="tel" placeholder="" minlength="11" maxlength="15" required>
         <span>Phone</span>
-<!--        <div class="btn">verifiy</div>-->
+        <!--        <div class="btn">verifiy</div>-->
     </label>
 
-<!--    <label style="display: flex; flex-direction: row;">-->
-<!--        <input class="number" type="text" placeholder="">-->
-<!--        <span>Certification Number</span>-->
-<!--        <div class="btn2">registration</div>-->
-<!--    </label>-->
+    <!--    <label style="display: flex; flex-direction: row;">-->
+    <!--        <input class="number" type="text" placeholder="">-->
+    <!--        <span>Certification Number</span>-->
+    <!--        <div class="btn2">registration</div>-->
+    <!--    </label>-->
 
     <button class="submit" type="submit">Submit</button>
     <button onclick="home()" class="back">Back</button>
@@ -124,7 +124,15 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const phoneInput = document.querySelector('input[name="userPhone"]');
 
+        phoneInput.addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    });
+</script>
 
 <script>
 

@@ -13,6 +13,10 @@
 
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 
+    <!--    &lt;!&ndash; Vue Files &ndash;&gt;-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/vue-router@3/dist/vue-router.js"></script>-->
+
     <!-- Additional CSS Files -->
     <link rel="stylesheet" th:href="@{/assets/css/fontawesome.css}">
     <link rel="stylesheet" th:href="@{/assets/css/templatemo-scholar.css}">
@@ -252,9 +256,6 @@
             font-size: 1em;
         }
 
-        /*.events .item a {*/
-        /*    all:unset;*/
-        /*}*/
     </style>
 </head>
 
@@ -319,21 +320,22 @@
                             <div class="auth">
                                 <label style="display: flex; flex-direction: row;">
                                     <input class="number2" th:value="${user.userNickname}" name="userNickname" type="text" placeholder="">
-                                    <span>별명</span>
+                                    <span>기존 별명</span>
                                 </label>
 
                                 <label style="display: flex; flex-direction: row;">
-                                    <input class="number2" th:value="${user.userPhone}" name="userPhone" type="text" placeholder="" minlength="11" maxlength="15" required>
+                                    <input class="number2" th:value="${user.userPhone}" name="userPhone" type="text" placeholder="" pattern="[0-9]*" minlength="11" maxlength="15" required>
                                     <span>전화번호 수정</span>
                                 </label>
 
                                 <label style="display: flex; flex-direction: row;">
                                     <!--/*@thymesVar id="sessionIdx" type=""*/-->
-                                    <div th:onclick="'location.href=\'/App/mypage_reset_pw/' + ${user.idx} + '\''" class="btn3">비밀번호 재설정</div>
+                                    <div th:onclick="location.href='/App/mypage-reset_pw/[[${user.idx}]]'" class="btn3">비밀번호 재설정</div>
                                 </label>
                                 <button type="submit" class="edit_btn">수정</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -410,7 +412,15 @@
     </div>
 </div>
 <!-- end under bar -->
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const phoneInput = document.querySelector('input[name="userPhone"]');
 
+        phoneInput.addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
